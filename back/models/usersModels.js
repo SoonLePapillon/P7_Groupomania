@@ -11,17 +11,29 @@ const users = db.define('users', {
         type : DataTypes.STRING,
         allowNull : false,
     },
-    // username : {
-    //     type : DataTypes.STRING,
-    //     allowNull : false,
-    // },
-    // avatar : {
-    //     type : DataTypes.STRING,
-    // },
-    // role : {
-    //     type : DataTypes.STRING,
-    //     allowNull : false,
-    // } 
+    firstName : {
+        type : DataTypes.STRING,
+        allowNull : true, // à changer pour false
+    },
+    lastName : {
+        type : DataTypes.STRING,
+        allowNull : true, // à changer pour false
+    },
+    username : {
+        type : DataTypes.STRING,
+        allowNull : false, // à changer pour false
+    },
+    avatar : {
+        type : DataTypes.STRING,
+        allowNull : true, // à changer pour false
+    },
+    admin : {
+        type : DataTypes.BOOLEAN,
+        allowNull : false,
+        defaultValue : false,
+    } 
 });
+
+users.sync();
 
 export default users

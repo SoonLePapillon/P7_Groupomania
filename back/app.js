@@ -1,7 +1,9 @@
 import express from 'express';
-import routes from './routes/routes.js';
 import Db from './db/dbconfig.js';
 import 'dotenv/config';
+
+import postsRoutes from './routes/postsRoutes.js';
+import usersRoutes from './routes/usersRoutes.js';
 
 const app = express();
 
@@ -13,7 +15,9 @@ app.use((req, res, next) => { //middleware général sera appliqué à toutes le
 });
 
 app.use(express.json()); // pour parser les données json
-app.use(routes);
+
+app.use("/api/posts", postsRoutes);
+app.use("/api/auth/", usersRoutes);
 
 Db.sync()
 .then(() => 

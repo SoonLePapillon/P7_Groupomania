@@ -10,22 +10,27 @@ const postController = {
           .catch((err) => res.status(400).send(err));
     },
     getOne: (req,res) => {
-         post.findById(req.params.id)
-          .then((post) => res.send(post))
+        //  posts.findById(req.params.id)
+         .then((post) => {res.status(200).json(post)})
           .catch((err) => res.status(400).send(err));
     },
     getAll: (req,res) => {
-       post.find()
+    //    posts.find()
         .then((posts) => res.send(posts))
         .catch((err) => res.status(400).send(err)); 
     },
     deleteOne: (req,res) => {
-       post.findByIdAndDelete(req.params.id)
+    //    posts.findByIdAndDelete(req.params.id)
         .then(() => res.send("post Deleted"))
         .catch((err) => res.status(400).send(err)); 
     },
     updateOne: (req,res) => {
-         post.findByIdAndUpdate(req.params.id,{ ...req.body })
+         posts.update({
+            id : req.body.id,
+            createdBy : req.body.createdBy,
+            content: req.body.content,
+            imageURL : req.body.imageURL
+         })
         .then((post) => res.send(post + "\n Votre post a bien été mise à jour"))
         .catch((err) => res.status(400).send(err)); 
     },

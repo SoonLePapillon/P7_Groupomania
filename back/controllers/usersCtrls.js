@@ -9,9 +9,11 @@ const userController = {
           const user = new users({
             email: req.body.email,
             password: hash,
-            // username : req.body.username,
-            // avatar : req.body.avatar,
-            // role : req.body.role
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            username: req.body.username ? req.body.username : `${req.body.firstName} ${req.body.lastName}`,
+            avatar : req.body.avatar ? req.body.avar : `unfichieravecunePPpardéfaut`,
+            admin : req.body.admin
           });
           user.save()
             .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
