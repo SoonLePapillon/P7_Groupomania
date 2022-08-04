@@ -41,9 +41,10 @@ const userController = {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
               }
               res.status(200).json({ 
-                userId: user._id,
+                userId: user.id,
+                isAdmin : user.admin, // j'ai rajouté ça
                 token: jwt.sign(
-                  {userId: user._id},
+                  {userId: user.id},
                   process.env.TOKEN,
                   { expiresIn: "24h"}
                 )

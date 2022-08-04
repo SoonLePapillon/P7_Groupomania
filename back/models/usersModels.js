@@ -13,19 +13,19 @@ const users = db.define('users', {
     },
     firstName : {
         type : DataTypes.STRING,
-        allowNull : true, // à changer pour false
+        allowNull : true, 
     },
     lastName : {
         type : DataTypes.STRING,
-        allowNull : true, // à changer pour false
+        allowNull : true, 
     },
     username : {
         type : DataTypes.STRING,
-        allowNull : false, // à changer pour false
+        allowNull : false, 
     },
     avatar : {
         type : DataTypes.STRING,
-        allowNull : true, // à changer pour false
+        allowNull : true, 
     },
     admin : {
         type : DataTypes.BOOLEAN,
@@ -34,6 +34,6 @@ const users = db.define('users', {
     } 
 });
 
-users.sync();
+// users.sync();
 
 export default users
