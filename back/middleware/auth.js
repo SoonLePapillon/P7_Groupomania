@@ -1,14 +1,10 @@
 import jwt from 'jsonwebtoken';
-import users from '../models/usersModels.js';
 
 const auth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // On enlève l'espace et le Bearer pour récup que le token
-    console.log(token);
     const decodedToken = jwt.verify(token, process.env.TOKEN);
-    console.log(decodedToken);
     const userId = decodedToken.userId;
-    console.log(userId);
     req.auth = { userId : userId } // enrichit la requête du front, est exploitée dans la route delete
     // const adminUser = await users.findOne({ // le await est important vu qu'il n'y a pas de .then après
     //   where : {

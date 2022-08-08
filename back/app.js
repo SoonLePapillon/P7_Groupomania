@@ -1,8 +1,7 @@
 import express from 'express';
-import Db from './db/dbconfig.js';
-import 'dotenv/config';
 import postsRoutes from './routes/postsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
+import 'dotenv/config';
 
 const app = express();
 
@@ -17,14 +16,5 @@ app.use(express.json()); // pour parser les données json
 
 app.use("/api/posts", postsRoutes);
 app.use("/api/auth/", usersRoutes);
-
-Db.sync()
-.then(() => 
-    console.log("Connexion à la BDD réussie")
-)
-.catch(
-    error => console.log(error)
-)
-
 
 app.listen(process.env.PORT || 3000);

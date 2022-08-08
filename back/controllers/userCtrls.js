@@ -1,36 +1,36 @@
+import { user } from '../db/dbconfig.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import users from '../models/usersModels.js';
 
 const userController = {
     signup: (req,res) => {
         bcrypt.hash(req.body.password, 10) // 10 tours de hashage
         .then(hash => {
-          const user = new users({
+          const User = new user({
             email: req.body.email,
             password: hash,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             username: req.body.username ? req.body.username : `${req.body.firstName} ${req.body.lastName}`,
-            avatar : req.body.avatar ? req.body.avar : `unfichieravecunePPpardéfaut`,
+            avatar : req.body.avatar ? req.body.avatar : `unfichieravecunePPpardéfaut`,
             admin : req.body.admin
           });
-          user.save()
+          User.save()
             .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch((error) => {
+            .catch(() => {
               res.status(500).json({
                 message : "Une erreur est survenue lors de la création de votre compte."
               });
             });
         })
-        .catch((error) => {
+        .catch(() => {
           res.status(500).json({
             message : "Une erreur est survenue."
           });
         });
     },
     login: (req,res) => {
-        users.findOne({ email: req.body.email }) // pour trouver l'user, s'il existe
+        user.findOne({ email: req.body.email }) // pour trouver l'user, s'il existe
         .then(user => {
           if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -50,13 +50,13 @@ const userController = {
                 )
               });
             })
-            .catch((error) => {
+            .catch(() => {
               res.status(500).json({
                 message : "Une erreur est survenue."
               });
             });
         })
-        .catch((error) => {
+        .catch(() => {
           res.status(500).json({
             message : "Une erreur est survenue."
           });
