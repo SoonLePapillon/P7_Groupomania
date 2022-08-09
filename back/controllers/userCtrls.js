@@ -11,26 +11,21 @@ const userController = {
             password: hash,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            username: req.body.username ? req.body.username : `${req.body.firstName} ${req.body.lastName}`,
-            avatar : req.body.avatar ? req.body.avatar : `unfichieravecunePPpardéfaut`,
-            admin : req.body.admin
+            avatar : req.body.avatar ? req.body.avatar : 'https://dfge.de/wp-content/uploads/blank-profile-picture-973460_640.png',
+            isAdmin : req.body.isAdmin
           });
           User.save()
             .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-            .catch(() => {
-              res.status(500).json({
-                message : "Une erreur est survenue lors de la création de votre compte."
-              });
-            });
+            .catch(() => res.status(500).json({ message : "Une erreur est survenue lors de la création de votre compte." }));
         })
-        .catch(() => {
-          res.status(500).json({
-            message : "Une erreur est survenue."
-          });
-        });
+        .catch(() => res.status(500).json({ message : "Une erreur est survenue." }));
     },
     login: (req,res) => {
-        user.findOne({ email: req.body.email }) // pour trouver l'user, s'il existe
+        user.findOne({                 
+          where : { 
+            email : req.body.email
+            } 
+        }) // pour trouver l'user, s'il existe
         .then(user => {
           if (!user) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -42,26 +37,21 @@ const userController = {
               }
               res.status(200).json({ 
                 userId: user.id,
-                isAdmin : user.admin, // j'ai rajouté ça
+                userRole : user.isAdmin, // j'ai rajouté ça
+                userName : user.firstName,
                 token: jwt.sign(
-                  {userId: user.id},
+                  { userId: user.id, userRole : user.isAdmin },
                   process.env.TOKEN,
-                  { expiresIn: "24h"}
+                  { expiresIn: "24h" }
                 )
               });
             })
-            .catch(() => {
-              res.status(500).json({
-                message : "Une erreur est survenue."
-              });
-            });
+            .catch(() => res.status(500).json({ message : "Une erreur est survenue." }));
         })
-        .catch(() => {
-          res.status(500).json({
-            message : "Une erreur est survenue."
-          });
-        });
+        .catch(() => res.status(500).json({ message : "Une erreur est survenue." })
+        );
     },
+
     logout: (req,res) => {
       if (req.session) {
         req.session.destroy(err => {

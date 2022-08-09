@@ -1,24 +1,16 @@
 import jwt from 'jsonwebtoken';
-
+ 
 const auth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // On enlève l'espace et le Bearer pour récup que le token
     const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
-    req.auth = { userId : userId } // enrichit la requête du front, est exploitée dans la route delete
-    // const adminUser = await users.findOne({ // le await est important vu qu'il n'y a pas de .then après
-    //   where : {
-    //     id : userId,
-    //     isAdmin : true
-    //   }
-    // })
-    // if (adminUser) {
-    //   next();
-    // } 
+    const userAdmin = decodedToken.userRole;
+    req.auth = { userId : userId, role : userAdmin }; // enrichit la requête du front, est exploitée dans la route delete
+    console.log("a");
     if (req.body.userId && req.body.userId !== userId) {
       throw 'Invalid user ID'; 
-    } 
-    else {
+    } else {
       next();
     }
   } catch {

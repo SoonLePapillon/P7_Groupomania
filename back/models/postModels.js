@@ -9,10 +9,17 @@ export const postModel = (sequelize, DataTypes) => {
         },
         content : {
             type : DataTypes.TEXT,
+            // allowNull : true est déjà par défaut
         },
         imageUrl : {
             type : DataTypes.STRING,
-            // allowNull : true est déjà par défaut
+        },
+        likedBy : {
+            type : DataTypes.ARRAY(DataTypes.INTEGER)
+        },
+        likes : {
+            type : DataTypes.INTEGER,
+            defaultValue : 0,
         }
     });
 }

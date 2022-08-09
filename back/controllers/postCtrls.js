@@ -8,7 +8,11 @@ const postController = {
                 content : req.body.content,
                 imageUrl : req.body.imageUrl
             })
-            res.status(200).send(Post)
+            if (Post.content === NULL && Post.imageURL === NULL) {
+                res.status(400).json({message : "Votre post ne peut pas être vide, merci d'indiquer ."})
+            } else {
+                res.status(200).send(Post)
+            }
         } catch (err) { 
             res.status(400).send(err)
         }
@@ -38,29 +42,38 @@ const postController = {
             res.status(400)
         }
     },
-//     updateOne: (req,res) => {
-//         posts.update({
-//            where: {
-//                id : req.params.id
-//            }
-//         })
-//        .then((post) => {
-//        if (req.auth.userId !== req.body.createdBy) {
-//         return res.status(401).json({message: 'vous ne pouvez pas modifier cette sauce'})
-//        } 
-//    },
-    deleteOne: async (req,res) => {
-        try {
-            const Post = await post.destroy({ 
-                where : {
-                    id : req.params.id
-                }
-            })
+    updateOne: (req,res) => {
+        if (req.auth.userId !== post.userId && req.auth.admin === false) {
+            res.status(401).json({ message : "You can't modify this post"})
+        } else {
+            try {
+                const Post = post.update({
+                    where: {
+                        id : req.params.id
+                    }
+                })
             res.status(200).send(Post)
-        } catch { 
-            res.status(400)
+        } catch (err) {
+                res.status(400).send(err)
+            } 
         }
-    }
+    },
+    deleteOne: async (req,res) => {
+        if (req.auth.userId !== post.userId && req.auth.role === false) {
+            res.status(401).json({ message : "You can't delete this post"})
+        } else {
+            try {
+                await post.destroy({ 
+                    where : {
+                        id : req.params.id
+                    }
+                })
+                res.status(200).json({ message : "Post deleted"})
+            } catch (err) { 
+                res.status(400).send(err);
+            }
+        }
+    },
 }
 
 export default postController;
