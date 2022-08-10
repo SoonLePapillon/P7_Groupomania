@@ -4,7 +4,6 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// CRUD // 
 router.post('/createOne', auth, postController.createOne);
 router.get('/getAll', auth, postController.getAll);
 router.get('/getOne/:id', auth, postController.getOne);

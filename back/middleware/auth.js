@@ -7,7 +7,6 @@ const auth = async (req, res, next) => {
     const userId = decodedToken.userId;
     const userAdmin = decodedToken.userRole;
     req.auth = { userId : userId, role : userAdmin }; // enrichit la requête du front, est exploitée dans la route delete
-    console.log("a");
     if (req.body.userId && req.body.userId !== userId) {
       throw 'Invalid user ID'; 
     } else {
@@ -21,6 +20,5 @@ const auth = async (req, res, next) => {
 };
 
 export default auth
-
 
 // tout ça ce sont des informations envoyées depuis le front. Mon token = req.headers.authorisation n'existe pas sans le front mais je peux simuler les headers et le body depuis Insomnia

@@ -14,12 +14,5 @@ export const postModel = (sequelize, DataTypes) => {
         imageUrl : {
             type : DataTypes.STRING,
         },
-        likedBy : {
-            type : DataTypes.ARRAY(DataTypes.INTEGER)
-        },
-        likes : {
-            type : DataTypes.INTEGER,
-            defaultValue : 0,
-        }
     });
 }
