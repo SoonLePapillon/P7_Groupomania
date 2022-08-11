@@ -11,7 +11,10 @@ export const userModel = (sequelize, DataTypes) => { // it's paramaters here
         email : {
             type : DataTypes.STRING,
             allowNull : false,
-            unique : true
+            unique : true,
+            validate : {
+                is: /.+\@.+\..+/
+            }
         },
         password : {
             type : DataTypes.STRING,
