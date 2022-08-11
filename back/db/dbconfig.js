@@ -19,18 +19,23 @@ export const react = reactionModel(sequelize, DataTypes);
 ///// Création des associations entre les tables
 // Créer la foreignKey "createdBy" sur la table post - CHECK OK
 user.hasMany(post, {
-    foreignKey : 'createdBy'
+    foreignKey : 'createdBy',
+    onDelete : 'CASCADE'
 });
 post.belongsTo(user, {
     foreignKey : 'createdBy'
 });
 
 // Créer la foreignKey "postId" sur la table react - CHECK OK
-post.hasMany(react);
+post.hasMany(react, {
+    onDelete : 'CASCADE'
+});
 react.belongsTo(post)
 
 // Créer la foreignKey "userId" sur la table react - CHECK OK
-user.hasMany(react);
+user.hasMany(react, {
+    onDelete : 'CASCADE'
+});
 react.belongsTo(user);
 
 ///// Synchronisation et mise à jour de la base de données

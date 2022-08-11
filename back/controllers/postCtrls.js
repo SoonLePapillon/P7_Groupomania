@@ -20,12 +20,12 @@ const postController = {
         },
     getOne: async (req,res) => {
         try {
-            const Post = await post.findOne({ 
+            const findPost = await post.findOne({ 
                 where : { 
                     id : req.params.id
                 }
             })
-            res.status(200).send(Post)
+            res.status(200).send(findPost)
         } catch { 
             res.status(400)
         }
@@ -44,12 +44,12 @@ const postController = {
         }
     },
     updateOne: async (req,res) => {
-        const Post = await post.findOne({ 
+        const findPost = await post.findOne({ 
             where : { 
                 id : req.params.id
             }
         })
-        if (req.auth.userId !== Post.createdBy && req.auth.role === false) {
+        if (findPost && req.auth.userId !== Post.createdBy && req.auth.role === false) {
             res.status(401).json({ message : "You can't delete this post"})
         } else {
             try {
@@ -61,12 +61,12 @@ const postController = {
         }
     },
     deleteOne: async (req,res) => {
-        const Post = await post.findOne({ 
+        const findPost = await post.findOne({ 
             where : { 
                 id : req.params.id
             }
         })
-        if (req.auth.userId !== Post.createdBy && req.auth.role === false) {
+        if (findPost && req.auth.userId !== Post.createdBy && req.auth.role === false) {
             res.status(401).json({ message : "You can't delete this post"})
         } else {
             try {

@@ -2,8 +2,6 @@ import { react } from '../db/dbconfig.js'
 
 const reactionController = {
     react: async (req,res) => {
-        console.log(req.params.postId);
-        console.log(req.body.postId);
         const findReact = await react.findOne({ // On cherche si l'utilisateur a déjà réagi à ce post
             where : { 
                 userId : req.auth.userId,

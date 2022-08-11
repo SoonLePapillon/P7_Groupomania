@@ -2,6 +2,7 @@ import express from 'express';
 import postController from '../controllers/postCtrls.js';
 import auth from '../middleware/auth.js';
 
+
 const router = express.Router();
 
 router.post('/createOne', auth, postController.createOne);
