@@ -1,35 +1,42 @@
 <template>
-    <HeaderCpnt msg="Welcome to Your Vue.js App"/>
+    <HeaderCpnt msg="Test"/>
     <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
+    <router-link to="/signup">About</router-link>
+
+    <RouterView/>
+    
 </template>
 
 <script>
 
-import HeaderCpnt from './components/HeaderCpnt.vue'
+import HeaderCpnt from './components/MainHeader.vue';
+import { RouterView } from 'vue-router';
 
 
 export default {
   name: 'App',
   components: {
-    HeaderCpnt
+    HeaderCpnt,
+    RouterView
+  }
 }
-}
+
+
 </script>
 
-<style>
+<style lang="scss">
+
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import "./scss/_var.scss";
+
 *, ::after, ::before {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  font-family: 'Lato', sans-serif;
 }
 
 

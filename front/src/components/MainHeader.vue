@@ -14,6 +14,14 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 
+img {
+  width: 100%;
+}
+
+h1 {
+  font-size: 3rem;
+  color: $primary-red;
+}
 </style>
