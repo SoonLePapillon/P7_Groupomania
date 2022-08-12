@@ -4,17 +4,14 @@
     </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {};
-  },
-};
+<script setup>
+
 </script>
 
 <style lang="scss" scoped>
 
 .connect {
     color : $primary-red;
-}
+};
+
 </style>
