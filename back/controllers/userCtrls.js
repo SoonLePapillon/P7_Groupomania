@@ -52,11 +52,11 @@ const userController = {
         );
     },
 
-    logout: (req,res) => {
-        let token = req.auth.token;
-        token = undefined;
-        res.status(200).send("Logout" + token)
-      }
+    // logout: (req,res) => {
+    //     let token = req.auth.token;
+    //     token = undefined;
+    //     res.status(200).send("Logout" + token)
+    //   }
 }
     
 export default userController;

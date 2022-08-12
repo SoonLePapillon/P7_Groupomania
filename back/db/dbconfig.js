@@ -26,17 +26,25 @@ post.belongsTo(user, {
     foreignKey : 'createdBy'
 });
 
+
+
 // Créer la foreignKey "postId" sur la table react - CHECK OK
 post.hasMany(react, {
     onDelete : 'CASCADE'
 });
 react.belongsTo(post)
 
+
+
+
 // Créer la foreignKey "userId" sur la table react - CHECK OK
 user.hasMany(react, {
     onDelete : 'CASCADE'
 });
 react.belongsTo(user);
+
+
+
 
 ///// Synchronisation et mise à jour de la base de données
 sequelize.sync({ alter : true }) 

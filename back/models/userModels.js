@@ -2,7 +2,7 @@
 import 'dotenv/config';
 
 export const userModel = (sequelize, DataTypes) => { // it's paramaters here
-    return sequelize.define('users', {
+    return sequelize.define('user', {
         id : {
             type : DataTypes.INTEGER,
             autoIncrement: true,
