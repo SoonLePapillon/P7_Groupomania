@@ -1,5 +1,11 @@
 // COLORS
 
-$primary-red: #FD2D01;
-$second-red: #FFD7D7;
-$third-gray: #4E5166;
+$primary-red: #fd2d01;
+$second-red: #ffd7d7;
+$third-gray: #4e5166;
+
+@mixin flex_column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

@@ -12,5 +12,6 @@ module.exports = {
     'prettier/prettier': ['error', { singleQuote: true }],
     'object-curly-newline': 'off',
     'no-console': 'off',
+    endOfLine: 'auto',
   },
 };

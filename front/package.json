@@ -1,7 +1,7 @@
 {
   "name": "front",
   "version": "0.0.0",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -20,6 +20,7 @@
     "eslint": "^8.21.0",
     "eslint-plugin-vue": "^9.3.0",
     "prettier": "^2.7.1",
+    "sass": "^1.54.4",
     "vite": "^3.0.4"
   }
 }

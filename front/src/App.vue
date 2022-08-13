@@ -1,14 +1,15 @@
 <template>
-  <div v-if="isLogin" class="hello">
-    <h1>Citryyyyyyyyyyyy</h1>
+  <logo-component></logo-component>
+  <div v-if="showHeader">
+    <router-link to="/">Home</router-link>
+    <router-link to="/signup">Signup</router-link>
   </div>
-  <router-link to="/">Home</router-link>
-  <router-link to="/signup">Signup</router-link>
 
   <RouterView />
 </template>
 
 <script setup>
+import LogoComponent from './components/LogoComponent.vue';
 // setup sert à passer à l'api composition (en gros)
 
 import { computed, onMounted } from 'vue';
@@ -16,9 +17,9 @@ import { useRouter } from 'vue-router';
 
 const route = useRouter();
 
-const isLogin = computed(() => {
+const showHeader = computed(() => {
   // Computed est une fonction qui return forcément
-  return route.currentRoute.value.name === 'Signup';
+  return route.currentRoute.value.name === '';
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
@@ -39,9 +40,16 @@ onMounted(() => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
 }
 
 body {
-  font-family: 'Lato', sans-serif;
+  height: 100vh;
+}
+
+#app {
+  height: 100%;
+  @include flex_column;
+  height: 100%;
 }
 </style>
