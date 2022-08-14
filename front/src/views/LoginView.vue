@@ -4,14 +4,28 @@
     <form class="login__form">
       <div class="login__form__email">
         <label for="email">Email</label>
-        <input type="email" placeholder="Adresse mail*" name="email" />
+        <input
+          type="email"
+          placeholder="Adresse mail*"
+          name="email"
+          id="email"
+        />
       </div>
       <div class="mot_de_passe">
         <label for="password">Mot de passe</label>
-        <input type="password" placeholder="Mot de passe*" name="password" />
-        <fa icon="fa-solid fa-eye" class="eye" />
+        <input
+          type="password"
+          placeholder="Mot de passe*"
+          name="password"
+          id="password"
+        />
+        <fa icon="fa-solid fa-eye" class="eye" @click="showPassword" />
       </div>
-      <button-form-component text="Se connecter"></button-form-component>
+      <button-form-component
+        text="Se connecter"
+        id="submitButton"
+        @click="submitUser"
+      ></button-form-component>
     </form>
     <footer>
       <p class="info">Pas de compte ?</p>
@@ -22,6 +36,38 @@
 
 <script setup>
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+
+function showPassword() {
+  let input = document.getElementById('password');
+  let eye = document.querySelector('.eye');
+  if (input.type === 'password') {
+    input.type = 'text';
+    eye.style.color = 'rgba(218, 67, 67, 0.842)';
+  } else {
+    input.type = 'password';
+    eye.style.color = 'rgba(218, 67, 67, 0.534)';
+  }
+}
+
+function submitUser() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  fetch('http://localhost:3000/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
+}
 </script>
 
 <style lang="scss">
@@ -87,7 +133,6 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
         color: rgba(218, 67, 67, 0.534);
         transition: 150ms;
         &:hover {
-          color: rgba(218, 67, 67, 0.842);
           transition: 150ms;
           cursor: pointer;
         }

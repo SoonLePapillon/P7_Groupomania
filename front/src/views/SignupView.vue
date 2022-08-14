@@ -6,8 +6,13 @@
       <input type="text" placeholder="Prénom*" class="input small" />
       <input type="email" placeholder="Adresse mail*" class="input large" />
       <div>
-        <input type="password" placeholder="Mot de passe*" class="input" />
-        <fa icon="fa-solid fa-eye" class="eye" />
+        <input
+          type="password"
+          placeholder="Mot de passe*"
+          class="input"
+          id="password"
+        />
+        <fa icon="fa-solid fa-eye" class="eye" @click="showPassword" />
       </div>
       <input
         type="password"
@@ -29,6 +34,18 @@
 
 <script setup>
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+
+function showPassword() {
+  let input = document.getElementById('password');
+  let eye = document.querySelector('.eye');
+  if (input.type === 'password') {
+    input.type = 'text';
+    eye.style.color = 'rgba(218, 67, 67, 0.842)';
+  } else {
+    input.type = 'password';
+    eye.style.color = 'rgba(218, 67, 67, 0.534)';
+  }
+}
 </script>
 
 <style lang="scss">
@@ -103,7 +120,6 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
         color: rgba(218, 67, 67, 0.534);
         transition: 150ms;
         &:hover {
-          color: rgba(218, 67, 67, 0.842);
           transition: 150ms;
           cursor: pointer;
         }

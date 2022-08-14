@@ -1,7 +1,7 @@
 <template>
   <logo-component></logo-component>
   <div v-if="showHeader">
-    <router-link to="/">Home</router-link>
+    <router-link to="/">Login</router-link>
     <router-link to="/signup">Signup</router-link>
   </div>
 
