@@ -17,7 +17,7 @@ defineProps({
 button {
   width: 290px;
   height: 50px;
-  background: $primary-red;
+  background: #ff2a00f5;
   opacity: 0.9;
   box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
@@ -28,6 +28,11 @@ button {
     font-size: 24px;
     text-align: center;
     color: #ffffff;
+  }
+  &:hover {
+    background: #fd2d01;
+    cursor: pointer;
+    box-shadow: 5px 4px 7px rgba(0, 0, 0, 0.5);
   }
 }
 </style>

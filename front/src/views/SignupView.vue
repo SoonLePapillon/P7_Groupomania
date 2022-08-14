@@ -20,8 +20,10 @@
       </p>
       <button-form-component text="Envoyer"></button-form-component>
     </form>
-    <p>Déjà inscrit ?</p>
-    <p class="red">Connectez-vous !</p>
+    <footer>
+      <p class="info">Déjà inscrit ?</p>
+      <router-link class="info red" to="/">Connectez-vous !</router-link>
+    </footer>
   </div>
 </template>
 
@@ -34,10 +36,13 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
   width: 90%;
+  max-width: 1000px;
+  height: 80%;
   box-shadow: 5px 5px 20px #0000003d;
   border-radius: 16px;
+  margin-top: 2%;
   &__title {
     width: 298px;
     height: 50px;
@@ -45,17 +50,18 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
     font-size: 32px;
     line-height: 38px;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 3%;
     color: rgba(0, 0, 0, 0.76);
   }
   &__form {
     position: relative;
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
     align-items: center;
     width: 90%;
-    justify-content: space-between;
-    row-gap: 20px;
+    height: 70%;
+    column-gap: 2%;
     & .input {
       height: 41px;
       background: #ffffff;
@@ -67,61 +73,75 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
         height: 30px;
         font-size: 16px;
       }
+      &:focus {
+        outline: none;
+        border: 2px solid $primary-red;
+      }
     }
     & .small {
-      min-width: 150px;
       width: 49%;
     }
     & .large {
-      min-width: 310px;
       width: 100%;
     }
     & div {
       position: relative;
       width: 100%;
-      min-width: 310px;
       height: 41px;
-      border: 1px solid #00000085;
       border-radius: 5px;
       & input {
         width: 100% !important;
         height: 100% !important;
-        border: none !important;
+        border: 1px solid #00000085;
       }
       & .eye {
         position: absolute;
         width: 31px;
         height: 23px;
-        bottom: 7px;
+        bottom: 8px;
         right: 7px;
         color: rgba(218, 67, 67, 0.534);
         transition: 150ms;
         &:hover {
           color: rgba(218, 67, 67, 0.842);
           transition: 150ms;
+          cursor: pointer;
         }
       }
     }
     &__passwordInfo {
       margin-top: -10px;
-      width: 310px;
+      width: 100%;
       font-size: 12px;
       line-height: 14px;
     }
   }
 }
 
-form ~ p {
+footer {
+  display: flex;
+  width: max-content;
+  justify-content: space-between;
+  gap: 10px;
+}
+.info {
+  flex: 1;
+  max-width: max-content;
+  height: min-content;
   font-weight: 400;
   font-size: 15px;
-  margin-bottom: 30px;
+  text-align: center;
 }
 .red {
   color: #d63535;
+  text-decoration: none;
   &:hover {
     color: #ff0000;
     font-weight: bold;
     cursor: pointer;
   }
+}
+
+@media all and (min-width: 768px) {
 }
 </style>

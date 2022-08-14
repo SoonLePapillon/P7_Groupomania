@@ -7,13 +7,15 @@
 <style lang="scss" scoped>
 .logo {
   width: 95%;
-  height: 65px;
-  margin-top: 10%;
-  margin-bottom: 10%;
+  height: 10%;
+  margin-top: 2%;
   & > img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
+}
+
+@media all and (min-width: 768px) {
 }
 </style>
