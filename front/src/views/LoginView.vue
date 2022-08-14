@@ -9,22 +9,33 @@
           placeholder="Adresse mail*"
           name="email"
           id="email"
+          v-model="email"
         />
       </div>
       <div class="mot_de_passe">
         <label for="password">Mot de passe</label>
         <input
-          type="password"
+          :type="inputType"
           placeholder="Mot de passe*"
           name="password"
           id="password"
+          v-model="password"
         />
-        <fa icon="fa-solid fa-eye" class="eye" @click="showPassword" />
+        <fa
+          icon="fa-solid fa-eye"
+          class="eye"
+          v-bind:class="{
+            'red-first': inputType === 'password',
+            'red-snd': inputType === 'text',
+          }"
+          @click="showPassword"
+        />
       </div>
       <button-form-component
         text="Se connecter"
         id="submitButton"
         @click="submitUser"
+        :disabled="isFormFilled"
       ></button-form-component>
     </form>
     <footer>
@@ -36,37 +47,54 @@
 
 <script setup>
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+import { ref, computed } from 'vue';
+
+const email = ref('');
+const password = ref('');
+
+const inputType = ref('password');
 
 function showPassword() {
-  let input = document.getElementById('password');
-  let eye = document.querySelector('.eye');
-  if (input.type === 'password') {
-    input.type = 'text';
-    eye.style.color = 'rgba(218, 67, 67, 0.842)';
+  if (inputType.value === 'password') {
+    inputType.value = 'text';
   } else {
-    input.type = 'password';
-    eye.style.color = 'rgba(218, 67, 67, 0.534)';
+    inputType.value = 'password';
   }
 }
 
+const isFormFilled = computed(() => {
+  return email.value === '' || password.value === '';
+});
+
+// function showPassword() {
+//   let input = document.getElementById('password');
+//   let eye = document.querySelector('.eye');
+//   if (input.type === 'password') {
+//     input.type = 'text';
+//     eye.style.color = 'rgba(218, 67, 67, 0.842)';
+//   } else {
+//     input.type = 'password';
+//     eye.style.color = 'rgba(218, 67, 67, 0.534)';
+//   }
+// }
+
 function submitUser() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  fetch('http://localhost:3000/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-    });
+  console.log(email.value);
+  // fetch('http://localhost:3000/api/auth/login', {
+  //   method: 'POST',
+  //   body: JSON.stringify({
+  //     email,
+  //     password,
+  //   }),
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     console.log(data);
+  //   });
 }
 </script>
 
@@ -130,7 +158,7 @@ function submitUser() {
         height: 23px;
         bottom: 8px;
         right: 7px;
-        color: rgba(218, 67, 67, 0.534);
+
         transition: 150ms;
         &:hover {
           transition: 150ms;
@@ -163,5 +191,12 @@ footer {
     font-weight: bold;
     cursor: pointer;
   }
+}
+
+.red-first {
+  color: rgba(218, 67, 67, 0.534);
+}
+.red-snd {
+  color: rgba(218, 67, 67, 0.999);
 }
 </style>

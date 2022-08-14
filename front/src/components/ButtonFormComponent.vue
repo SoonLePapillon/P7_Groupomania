@@ -1,5 +1,5 @@
 <template>
-  <button>
+  <button :disabled="disabled">
     <span>{{ text }}</span>
   </button>
 </template>
@@ -9,6 +9,9 @@ defineProps({
   text: {
     type: String,
     required: true,
+  },
+  disabled: {
+    type: Boolean,
   },
 });
 </script>
