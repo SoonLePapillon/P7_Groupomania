@@ -1,4 +1,5 @@
 <template>
+  <logo-component></logo-component>
   <div class="login">
     <h2 class="login__title">Connexion</h2>
     <form class="login__form">
@@ -21,15 +22,7 @@
           id="password"
           v-model="password"
         />
-        <fa
-          icon="fa-solid fa-eye"
-          class="eye"
-          v-bind:class="{
-            'red-first': inputType === 'password',
-            'red-snd': inputType === 'text',
-          }"
-          @click="showPassword"
-        />
+        <eye-component :type="inputType" :click="showPassword"></eye-component>
       </div>
       <button-form-component
         text="Se connecter"
@@ -39,62 +32,42 @@
       ></button-form-component>
     </form>
     <footer>
-      <p class="info">Pas de compte ?</p>
-      <router-link class="info red" to="/signup">Inscrivez-vous !</router-link>
+      <text-bottom-form-component
+        question="Pas de compte ?"
+        response="Inscrivez-vous !"
+        url="/signup"
+      ></text-bottom-form-component>
     </footer>
   </div>
 </template>
 
 <script setup>
-import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import { ref, computed } from 'vue';
+import { useUserStore } from '../stores/index.js';
+import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+import LogoComponent from '../components/LogoComponent.vue';
+import EyeComponent from '../components/EyeComponent.vue';
+import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
 
+const userStore = useUserStore();
+const inputType = ref('password');
 const email = ref('');
 const password = ref('');
-
-const inputType = ref('password');
-
-function showPassword() {
-  if (inputType.value === 'password') {
-    inputType.value = 'text';
-  } else {
-    inputType.value = 'password';
-  }
-}
 
 const isFormFilled = computed(() => {
   return email.value === '' || password.value === '';
 });
 
-// function showPassword() {
-//   let input = document.getElementById('password');
-//   let eye = document.querySelector('.eye');
-//   if (input.type === 'password') {
-//     input.type = 'text';
-//     eye.style.color = 'rgba(218, 67, 67, 0.842)';
-//   } else {
-//     input.type = 'password';
-//     eye.style.color = 'rgba(218, 67, 67, 0.534)';
-//   }
-// }
+const submitUser = async () => {
+  const result = await userStore.login(email.value, password.value);
+  console.log(result.token);
+  localStorage.setItem('TokenUser', result.token);
+};
 
-function submitUser() {
-  console.log(email.value);
-  // fetch('http://localhost:3000/api/auth/login', {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     email,
-  //     password,
-  //   }),
-  //   headers: {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log(data);
-  //   });
+function showPassword() {
+  inputType.value === 'password' // On vérifie si le type est password.
+    ? (inputType.value = 'text') // Si oui on le passe en texte
+    : (inputType.value = 'password'); // Si non, on le laisse en password
 }
 </script>
 
@@ -152,19 +125,6 @@ function submitUser() {
       position: relative;
       width: 100%;
       border-radius: 5px;
-      & .eye {
-        position: absolute;
-        width: 31px;
-        height: 23px;
-        bottom: 8px;
-        right: 7px;
-
-        transition: 150ms;
-        &:hover {
-          transition: 150ms;
-          cursor: pointer;
-        }
-      }
     }
   }
 }
@@ -174,29 +134,5 @@ footer {
   width: max-content;
   justify-content: space-between;
   gap: 10px;
-}
-.info {
-  flex: 1;
-  max-width: max-content;
-  height: min-content;
-  font-weight: 400;
-  font-size: 15px;
-  text-align: center;
-}
-.red {
-  color: #d63535;
-  text-decoration: none;
-  &:hover {
-    color: #ff0000;
-    font-weight: bold;
-    cursor: pointer;
-  }
-}
-
-.red-first {
-  color: rgba(218, 67, 67, 0.534);
-}
-.red-snd {
-  color: rgba(218, 67, 67, 0.999);
 }
 </style>

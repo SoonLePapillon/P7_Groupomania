@@ -1,9 +1,10 @@
 <template>
-  <logo-component></logo-component>
-  <div v-if="showHeader">
-    <router-link to="/">Login</router-link>
-    <router-link to="/signup">Signup</router-link>
-  </div>
+  <header v-if="showHeader" class="header">
+    <div class="logo"><img src="../src/assets/logo.jpg" /></div>
+    <nav>
+      <router-link to="/" class="logout">Deconnexion</router-link>
+    </nav>
+  </header>
 
   <RouterView />
 </template>
@@ -19,7 +20,7 @@ const route = useRouter();
 
 const showHeader = computed(() => {
   // Computed est une fonction qui return forcément
-  return route.currentRoute.value.name === '';
+  return route.currentRoute.value.name === 'News';
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
@@ -51,5 +52,40 @@ body {
   height: 100%;
   @include flex_column;
   height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 10%;
+  max-height: 60px;
+  width: 100%;
+  box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.178);
+  .logo {
+    height: 100%;
+    max-width: 30%;
+    margin-left: 2%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  width: 150px;
+  justify-content: center;
+  font-weight: bold;
+  text-decoration: none;
+  color: rgba(255, 0, 0, 0.507);
+  height: 100%;
+  &:hover {
+    // border: 2px solid rgba(255, 0, 0, 0.603);
+    box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.247);
+  }
 }
 </style>

@@ -1,18 +1,22 @@
 <template>
+  <logo-component></logo-component>
   <div class="signup">
     <h2 class="signup__title">Créez votre compte</h2>
     <form class="signup__form">
-      <input type="text" placeholder="Nom*" class="input small" />
+      <input type="text" placeholder="Nom*" class="input small"
+      pattern=/.+\@.+\..+/gm />
       <input type="text" placeholder="Prénom*" class="input small" />
       <input type="email" placeholder="Adresse mail*" class="input large" />
       <div>
         <input
-          type="password"
+          :type="inputType"
           placeholder="Mot de passe*"
-          class="input"
+          name="password"
           id="password"
+          v-model="password"
+          class="input large"
         />
-        <fa icon="fa-solid fa-eye" class="eye" @click="showPassword" />
+        <eye-component :type="inputType" :click="showPassword"></eye-component>
       </div>
       <input
         type="password"
@@ -26,26 +30,50 @@
       <button-form-component text="Envoyer"></button-form-component>
     </form>
     <footer>
-      <p class="info">Déjà inscrit ?</p>
-      <router-link class="info red" to="/">Connectez-vous !</router-link>
+      <text-bottom-form-component
+        question="Déjà inscrit ?"
+        response="Connectez-vous !"
+        url="/"
+      ></text-bottom-form-component>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+import LogoComponent from '../components/LogoComponent.vue';
+import EyeComponent from '../components/EyeComponent.vue';
+import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
+
+const inputType = ref('password');
+const password = ref('');
 
 function showPassword() {
-  let input = document.getElementById('password');
-  let eye = document.querySelector('.eye');
-  if (input.type === 'password') {
-    input.type = 'text';
-    eye.style.color = 'rgba(218, 67, 67, 0.842)';
-  } else {
-    input.type = 'password';
-    eye.style.color = 'rgba(218, 67, 67, 0.534)';
-  }
+  inputType.value === 'password' // On vérifie si le type est password.
+    ? (inputType.value = 'text') // Si oui on le passe en texte
+    : (inputType.value = 'password'); // Si non, on le laisse en password
 }
+
+// const inputValidations = {
+//   firstName: {
+//     regex: /^[A-Za-zÀ-ü-' ]+$/,
+//     frenchName: 'Prénom',
+//   },
+//   lastName: {
+//     regex: /^[A-Za-zÀ-ü-' ]+$/,
+//     frenchName: 'Nom',
+//   },
+//   email: {
+//     regex: /.+\@.+\..+/,
+//     frenchName: 'Email',
+//   },
+//   password: {
+//     regex:
+//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+//     frenchName: 'Password',
+//   },
+// };
 </script>
 
 <style lang="scss">
@@ -111,19 +139,6 @@ function showPassword() {
         height: 100% !important;
         border: 1px solid #00000085;
       }
-      & .eye {
-        position: absolute;
-        width: 31px;
-        height: 23px;
-        bottom: 8px;
-        right: 7px;
-        color: rgba(218, 67, 67, 0.534);
-        transition: 150ms;
-        &:hover {
-          transition: 150ms;
-          cursor: pointer;
-        }
-      }
     }
     &__passwordInfo {
       margin-top: -10px;
@@ -139,25 +154,5 @@ footer {
   width: max-content;
   justify-content: space-between;
   gap: 10px;
-}
-.info {
-  flex: 1;
-  max-width: max-content;
-  height: min-content;
-  font-weight: 400;
-  font-size: 15px;
-  text-align: center;
-}
-.red {
-  color: #d63535;
-  text-decoration: none;
-  &:hover {
-    color: #ff0000;
-    font-weight: bold;
-    cursor: pointer;
-  }
-}
-
-@media all and (min-width: 768px) {
 }
 </style>
