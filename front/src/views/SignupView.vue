@@ -3,10 +3,25 @@
   <div class="signup">
     <h2 class="signup__title">Créez votre compte</h2>
     <form class="signup__form">
-      <input type="text" placeholder="Nom*" class="input small"
-      pattern=/.+\@.+\..+/gm />
-      <input type="text" placeholder="Prénom*" class="input small" />
-      <input type="email" placeholder="Adresse mail*" class="input large" />
+      <input
+        type="text"
+        placeholder="Nom*"
+        class="input small"
+        v-model="lastName"
+        @change="test"
+      />
+      <input
+        type="text"
+        placeholder="Prénom*"
+        class="input small"
+        v-model="firstName"
+      />
+      <input
+        type="email"
+        placeholder="Adresse mail*"
+        class="input large"
+        v-model="email"
+      />
       <div>
         <input
           :type="inputType"
@@ -47,6 +62,9 @@ import EyeComponent from '../components/EyeComponent.vue';
 import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
 
 const inputType = ref('password');
+const firstName = ref('');
+const lastName = ref('');
+const email = ref('');
 const password = ref('');
 
 function showPassword() {
@@ -55,25 +73,42 @@ function showPassword() {
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
 
-// const inputValidations = {
-//   firstName: {
-//     regex: /^[A-Za-zÀ-ü-' ]+$/,
-//     frenchName: 'Prénom',
-//   },
-//   lastName: {
-//     regex: /^[A-Za-zÀ-ü-' ]+$/,
-//     frenchName: 'Nom',
-//   },
-//   email: {
-//     regex: /.+\@.+\..+/,
-//     frenchName: 'Email',
-//   },
-//   password: {
-//     regex:
-//       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-//     frenchName: 'Password',
-//   },
-// };
+const inputValidations = {
+  firstName: {
+    regex: /^[A-Za-zÀ-ü-' ]+$/,
+    frenchName: 'Prénom',
+  },
+  lastName: {
+    regex: /^[A-Za-zÀ-ü-' ]+$/,
+    frenchName: 'Nom',
+  },
+  email: {
+    regex: /.+\@.+\..+/,
+    frenchName: 'Email',
+  },
+  password: {
+    regex:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    frenchName: 'Password',
+  },
+};
+
+function test() {
+  for (let key in inputValidations) {
+    console.log(key, inputValidations[key].regex);
+  }
+  // console.log(element + ' test ' + inputValidations[element].regex);
+}
+
+// function testInput(inputName) {
+//   if (inputName.pattern.test(inputName.value) === true) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
+// testInput(lastName);
 </script>
 
 <style lang="scss">
