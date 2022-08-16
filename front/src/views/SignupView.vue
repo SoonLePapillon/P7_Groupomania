@@ -62,7 +62,10 @@
         <p ref="errorMsg" class="signup__form__errorMessage"></p>
       </div>
 
-      <button-form-component text="Envoyer"></button-form-component>
+      <button-form-component
+        text="Envoyer"
+        @click="validateForm"
+      ></button-form-component>
     </form>
     <footer>
       <text-bottom-form-component
@@ -95,7 +98,7 @@ function showPassword() {
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
 
-const regExp = {
+const regExpList = {
   firstName: /^[A-Za-zÀ-ü-' ]+$/,
   lastName: /^[A-Za-zÀ-ü-' ]+$/,
   email: /.+\@.+\..+/,
@@ -104,9 +107,9 @@ const regExp = {
 };
 
 const testRegexp = (el) => {
-  for (let key in regExp) {
+  for (let key in regExpList) {
     if (key === el.name) {
-      const regex = regExp[key];
+      const regex = regExpList[key];
       const test = regex.test(el.value);
       if (test) {
         if (el.classList.contains('isNotOk')) {
@@ -132,6 +135,11 @@ const checkPassword = () => {
     errorMsg.value.innerText = '';
     return true;
   }
+};
+
+const validateForm = (e) => {
+  e.preventDefault();
+  console.log(testRegexp(lastName));
 };
 </script>
 
