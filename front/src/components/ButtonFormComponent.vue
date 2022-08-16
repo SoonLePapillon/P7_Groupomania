@@ -1,7 +1,9 @@
 <template>
-  <button :disabled="disabled">
-    <span>{{ text }}</span>
-  </button>
+  <div>
+    <button :disabled="disabled">
+      <span>{{ text }}</span>
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -17,6 +19,11 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
+div {
+  display: flex;
+  justify-content: center;
+  height: min-content !important;
+}
 button {
   width: 290px;
   height: 50px;
@@ -25,7 +32,6 @@ button {
   box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   border: none;
-  margin: 20px 0;
   & > span {
     font-weight: 700;
     font-size: 24px;

@@ -20,7 +20,4 @@
 
 <script setup></script>
 
-<style lang="scss" scoped>
-.post {
-}
-</style>
+<style lang="scss" scoped></style>

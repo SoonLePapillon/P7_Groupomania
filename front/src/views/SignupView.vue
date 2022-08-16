@@ -4,44 +4,64 @@
     <h2 class="signup__title">Créez votre compte</h2>
     <form class="signup__form">
       <input
+        name="lastName"
         type="text"
         placeholder="Nom*"
         class="input small"
-        v-model="lastName"
-        @change="test"
+        @input="testRegexp(lastName)"
+        ref="lastName"
       />
       <input
+        name="firstName"
         type="text"
         placeholder="Prénom*"
         class="input small"
-        v-model="firstName"
+        @input="testRegexp(firstName)"
+        ref="firstName"
       />
       <input
+        name="email"
         type="email"
         placeholder="Adresse mail*"
         class="input large"
-        v-model="email"
+        @input="testRegexp(email)"
+        ref="email"
       />
       <div>
         <input
+          id="password"
+          name="password"
           :type="inputType"
           placeholder="Mot de passe*"
-          name="password"
-          id="password"
-          v-model="password"
           class="input large"
+          @input="
+            testRegexp(password);
+            checkPassword();
+          "
+          ref="password"
         />
         <eye-component :type="inputType" :click="showPassword"></eye-component>
       </div>
       <input
+        id="passwordConfirm"
+        name="password"
         type="password"
         placeholder="Confirmez votre mot de passe*"
         class="input large"
+        @input="
+          testRegexp(passwordConfirm);
+          checkPassword();
+        "
+        ref="passwordConfirm"
       />
       <p class="signup__form__passwordInfo">
         Doit contenir une majuscule, un chiffre et un caractère spécial (8
         caractères minimum)
       </p>
+      <div class="errorDiv">
+        <p ref="errorMsg" class="signup__form__errorMessage"></p>
+      </div>
+
       <button-form-component text="Envoyer"></button-form-component>
     </form>
     <footer>
@@ -62,10 +82,12 @@ import EyeComponent from '../components/EyeComponent.vue';
 import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
 
 const inputType = ref('password');
-const firstName = ref('');
-const lastName = ref('');
-const email = ref('');
-const password = ref('');
+const firstName = ref(null);
+const lastName = ref(null);
+const email = ref(null);
+const password = ref(null);
+const passwordConfirm = ref(null);
+const errorMsg = ref(null);
 
 function showPassword() {
   inputType.value === 'password' // On vérifie si le type est password.
@@ -73,42 +95,44 @@ function showPassword() {
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
 
-const inputValidations = {
-  firstName: {
-    regex: /^[A-Za-zÀ-ü-' ]+$/,
-    frenchName: 'Prénom',
-  },
-  lastName: {
-    regex: /^[A-Za-zÀ-ü-' ]+$/,
-    frenchName: 'Nom',
-  },
-  email: {
-    regex: /.+\@.+\..+/,
-    frenchName: 'Email',
-  },
-  password: {
-    regex:
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    frenchName: 'Password',
-  },
+const regExp = {
+  firstName: /^[A-Za-zÀ-ü-' ]+$/,
+  lastName: /^[A-Za-zÀ-ü-' ]+$/,
+  email: /.+\@.+\..+/,
+  password:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 };
 
-function test() {
-  for (let key in inputValidations) {
-    console.log(key, inputValidations[key].regex);
+const testRegexp = (el) => {
+  for (let key in regExp) {
+    if (key === el.name) {
+      const regex = regExp[key];
+      const test = regex.test(el.value);
+      if (test) {
+        if (el.classList.contains('isNotOk')) {
+          el.classList.remove('isNotOk');
+        }
+        console.log(test);
+        el.classList.add('isOk');
+        return test;
+      } else {
+        console.log(test);
+        el.classList.add('isNotOk');
+        return test;
+      }
+    }
   }
-  // console.log(element + ' test ' + inputValidations[element].regex);
-}
+};
 
-// function testInput(inputName) {
-//   if (inputName.pattern.test(inputName.value) === true) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-
-// testInput(lastName);
+const checkPassword = () => {
+  if (passwordConfirm.value.value !== password.value.value) {
+    errorMsg.value.innerText = 'Les mots de passe ne sont pas identiques.';
+    return false;
+  } else {
+    errorMsg.value.innerText = '';
+    return true;
+  }
+};
 </script>
 
 <style lang="scss">
@@ -128,7 +152,6 @@ function test() {
     height: 50px;
     font-weight: 700;
     font-size: 32px;
-    line-height: 38px;
     text-align: center;
     margin-top: 3%;
     color: rgba(0, 0, 0, 0.76);
@@ -137,11 +160,10 @@ function test() {
     position: relative;
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 90%;
     height: 70%;
-    column-gap: 2%;
     & .input {
       height: 41px;
       background: #ffffff;
@@ -189,5 +211,22 @@ footer {
   width: max-content;
   justify-content: space-between;
   gap: 10px;
+}
+
+.isOk {
+  border: 2px solid green !important;
+}
+
+.isNotOk {
+  border: 2px solid red !important;
+}
+
+.errorDiv {
+  height: min-content !important;
+  & p {
+    text-align: center;
+    color: $primary-red;
+    font-weight: bold;
+  }
 }
 </style>
