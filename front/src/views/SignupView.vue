@@ -42,22 +42,25 @@
         />
         <eye-component :type="inputType" :click="showPassword"></eye-component>
       </div>
-      <input
-        id="passwordConfirm"
-        name="password"
-        type="password"
-        placeholder="Confirmez votre mot de passe*"
-        class="input large"
-        @input="
-          testRegexp(passwordConfirm);
-          checkPassword();
-        "
-        ref="passwordConfirm"
-      />
-      <p class="signup__form__passwordInfo">
-        Doit contenir une majuscule, un chiffre et un caractère spécial (8
-        caractères minimum)
-      </p>
+      <div>
+        <input
+          id="passwordConfirm"
+          name="password"
+          type="password"
+          placeholder="Confirmez votre mot de passe*"
+          class="input large"
+          @input="
+            testRegexp(passwordConfirm);
+            checkPassword();
+          "
+          ref="passwordConfirm"
+        />
+        <p class="signup__form__passwordInfo">
+          Doit contenir une majuscule, un chiffre et un caractère spécial (8
+          caractères minimum)
+        </p>
+      </div>
+
       <div class="errorDiv">
         <p ref="errorMsg" class="signup__form__errorMessage"></p>
       </div>
@@ -79,11 +82,14 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useUserStore } from '../stores/index.js';
+import router from '../router/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import LogoComponent from '../components/LogoComponent.vue';
 import EyeComponent from '../components/EyeComponent.vue';
 import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
 
+const userStore = useUserStore();
 const inputType = ref('password');
 const firstName = ref(null);
 const lastName = ref(null);
@@ -137,14 +143,37 @@ const checkPassword = () => {
   }
 };
 
-const validateForm = (e) => {
+const validateForm = async (e) => {
   e.preventDefault();
-  console.log(testRegexp(lastName));
+  if (
+    testRegexp(lastName.value) &&
+    testRegexp(firstName.value) &&
+    testRegexp(email.value) &&
+    testRegexp(password.value) &&
+    testRegexp(passwordConfirm.value) &&
+    checkPassword()
+  ) {
+    const data = {
+      email: email.value.value,
+      password: password.value.value,
+      firstName: firstName.value.value,
+      lastName: lastName.value.value,
+    };
+    const x = await userStore.signup(data);
+    const result = await userStore.login(
+      email.value.value,
+      password.value.value
+    );
+    console.log(result.token);
+    localStorage.setItem('TokenUser', result.token);
+    router.push('/news');
+  }
 };
 </script>
 
 <style lang="scss">
 .signup {
+  background-color: white;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -206,7 +235,7 @@ const validateForm = (e) => {
       }
     }
     &__passwordInfo {
-      margin-top: -10px;
+      display: block;
       width: 100%;
       font-size: 12px;
       line-height: 14px;

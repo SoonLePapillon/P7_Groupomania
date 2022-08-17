@@ -12,9 +12,6 @@ const userController = {
           password: hash,
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          avatar: req.body.avatar
-            ? req.body.avatar
-            : "https://dfge.de/wp-content/uploads/blank-profile-picture-973460_640.png",
           isAdmin: req.body.isAdmin,
         });
         User.save()

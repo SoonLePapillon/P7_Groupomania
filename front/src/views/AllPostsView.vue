@@ -8,5 +8,6 @@
 .news {
   width: 100%;
   max-width: 1400px;
+  background-color: black;
 }
 </style>

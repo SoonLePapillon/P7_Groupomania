@@ -1,21 +1,27 @@
 <template>
-  <div class="logo"><img src="../assets/logo.jpg" /></div>
+  <div class="logo">
+    <img src="../assets/icon-left-font-monochrome-black.png" />
+  </div>
 </template>
 
 <script setup></script>
 
 <style lang="scss" scoped>
 .logo {
-  width: 95%;
+  display: flex;
+  justify-content: center;
+  width: 70%;
   height: 10%;
   margin-top: 2%;
   & > img {
-    width: 100%;
+    min-width: 40%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
-
-@media all and (min-width: 768px) {
+@media all and (max-width: 768px) {
+  div > img {
+    scale: 2;
+  }
 }
 </style>

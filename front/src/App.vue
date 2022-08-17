@@ -2,7 +2,7 @@
   <header v-if="showHeader" class="header">
     <div class="logo"><img src="../src/assets/logo.jpg" /></div>
     <nav>
-      <router-link to="/" class="logout">Deconnexion</router-link>
+      <router-link to="/" class="logout">Déconnexion</router-link>
     </nav>
   </header>
 
@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import LogoComponent from './components/LogoComponent.vue';
 // setup sert à passer à l'api composition (en gros)
 
 import { computed, onMounted } from 'vue';
@@ -20,7 +19,7 @@ const route = useRouter();
 
 const showHeader = computed(() => {
   // Computed est une fonction qui return forcément
-  return route.currentRoute.value.name === 'News';
+  return route.currentRoute.value.name === 'CreatePost' && 'News';
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
@@ -52,14 +51,17 @@ body {
   height: 100%;
   @include flex_column;
   height: 100%;
+  box-shadow: inset 5px 0 200px rgba(0, 0, 0, 0.452);
 }
 
 .header {
+  z-index: 99;
   display: flex;
   justify-content: space-between;
   height: 10%;
   max-height: 60px;
   width: 100%;
+  background-color: white;
   box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.178);
   .logo {
     height: 100%;
@@ -76,12 +78,12 @@ body {
 .logout {
   display: flex;
   align-items: center;
-  font-size: 18px;
-  width: 150px;
+  font-size: 15px;
+  width: 125px;
   justify-content: center;
   font-weight: bold;
   text-decoration: none;
-  color: rgba(255, 0, 0, 0.507);
+  color: #fb4646;
   height: 100%;
   &:hover {
     // border: 2px solid rgba(255, 0, 0, 0.603);

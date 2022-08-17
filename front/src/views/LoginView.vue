@@ -44,6 +44,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useUserStore } from '../stores/index.js';
+import router from '../router/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import LogoComponent from '../components/LogoComponent.vue';
 import EyeComponent from '../components/EyeComponent.vue';
@@ -58,10 +59,11 @@ const isFormFilled = computed(() => {
   return email.value === '' || password.value === '';
 });
 
-const submitUser = async () => {
+const submitUser = async (e) => {
+  e.preventDefault();
   const result = await userStore.login(email.value, password.value);
-  console.log(result.token);
   localStorage.setItem('TokenUser', result.token);
+  router.push('/news');
 };
 
 function showPassword() {
@@ -82,6 +84,7 @@ function showPassword() {
   height: 80%;
   box-shadow: 5px 5px 20px #0000003d;
   border-radius: 16px;
+  background-color: white;
   margin-top: 2%;
   &__title {
     width: 298px;

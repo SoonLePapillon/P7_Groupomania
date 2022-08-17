@@ -50,5 +50,17 @@ export const useUserStore = defineStore('user', {
       const data = await response.json();
       return data;
     },
+    async signup(data) {
+      const response = await fetch('http://localhost:3000/api/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const resData = await response.json();
+      return resData;
+    },
   },
 });
