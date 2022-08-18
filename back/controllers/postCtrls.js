@@ -9,7 +9,9 @@ const postController = {
         const Post = await post.create({
           userId: req.auth.userId,
           content: req.body.content,
-          imageUrl: req.body.imageUrl,
+          imageUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
           createdBy: req.auth.userId,
         });
         res.status(200).send(Post);
@@ -51,14 +53,19 @@ const postController = {
     });
     if (
       findPost &&
-      req.auth.userId !== Post.createdBy &&
+      req.auth.userId !== post.createdBy &&
       req.auth.role === false
     ) {
       res.status(401).json({ message: "You can't delete this post" });
     } else {
       try {
-        Post.update();
-        res.status(200).send(Post);
+        post.update({
+          content: req.body.content,
+          imageUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
+        });
+        res.status(200).send(post);
       } catch (err) {
         res.status(400).send(err);
       }

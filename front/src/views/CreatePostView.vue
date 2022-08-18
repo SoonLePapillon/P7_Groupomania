@@ -11,13 +11,13 @@
         <button @click="showBlop">Publier</button>
       </div>
       <div>
-        <label for="image-input" id="custom-label">+</label>
+        <label for="image-input" id="custom-label" ref="label">+</label>
         <input
           ref="input"
           id="image-input"
           type="file"
           accept="image/png, image/jpg, image/jpeg"
-          @change="test"
+          @change="showUploadedImg"
         />
       </div>
     </div>
@@ -26,35 +26,14 @@
 
 <script setup>
 import { ref } from 'vue';
-import AllPostsViewVue from './AllPostsView.vue';
 
-const textPost = ref(null);
+const label = ref(null);
 
-const input = ref(null);
-const test = async () => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      const uploaded_image = reader.result;
-      document.querySelector(
-        '#custom-label'
-      ).style.backgroundImage = `url(${uploaded_image})`;
-      resolve(uploaded_image);
-    });
-    reader.readAsDataURL(input.value.files[0]);
-  }).then((res) => {
-    // ???? //
-  });
+const showUploadedImg = (event) => {
+  const img = URL.createObjectURL(event.target.files[0]);
+  console.log(img);
+  label.value.style.backgroundImage = `url(${img})`;
 };
-
-const showBlop = async () => test().then((img) => console.log(img));
-
-// const data = {
-//   userId: '',
-//   content: '',
-//   imageUrl: '',
-//   createdBy: '',
-// };
 </script>
 
 <style lang="scss" scoped>
