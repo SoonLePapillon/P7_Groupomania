@@ -22,6 +22,18 @@ export const usePostStore = defineStore('post', {
       let data = await response.json();
       this.posts.push(data);
     },
+    async createOne() {
+      let response = await fetch('http://localhost:3000/api/posts/createOne', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const resData = await response.json();
+      return resData;
+    },
   },
 });
 
