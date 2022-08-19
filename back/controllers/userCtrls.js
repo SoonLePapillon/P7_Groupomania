@@ -53,7 +53,7 @@ const userController = {
                 token: jwt.sign(
                   { userId: user.id, userRole: user.isAdmin },
                   process.env.TOKEN,
-                  { expiresIn: "24h" }
+                  { expiresIn: "1h" }
                 ),
               });
             }

@@ -41,6 +41,10 @@
           ref="password"
         />
         <eye-component :type="inputType" :click="showPassword"></eye-component>
+        <p class="signup__form__passwordInfo">
+          Doit contenir une majuscule, un chiffre et un caractère spécial (8
+          caractères minimum)
+        </p>
       </div>
       <div>
         <input
@@ -55,10 +59,6 @@
           "
           ref="passwordConfirm"
         />
-        <p class="signup__form__passwordInfo">
-          Doit contenir une majuscule, un chiffre et un caractère spécial (8
-          caractères minimum)
-        </p>
       </div>
 
       <div class="errorDiv">
@@ -200,7 +200,8 @@ const validateForm = async (e) => {
     justify-content: space-between;
     align-items: center;
     width: 90%;
-    height: 70%;
+    height: 80%;
+    row-gap: 20px;
     & .input {
       height: 41px;
       background: #ffffff;
@@ -236,6 +237,7 @@ const validateForm = async (e) => {
     }
     &__passwordInfo {
       display: block;
+      margin-top: 1%;
       width: 100%;
       font-size: 12px;
       line-height: 14px;
@@ -248,6 +250,7 @@ footer {
   width: max-content;
   justify-content: space-between;
   gap: 10px;
+  margin-bottom: 15px;
 }
 
 .isOk {

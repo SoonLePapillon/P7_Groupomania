@@ -62,7 +62,14 @@ const isFormFilled = computed(() => {
 const submitUser = async (e) => {
   e.preventDefault();
   const result = await userStore.login(email.value, password.value);
-  localStorage.setItem('TokenUser', result.token);
+  localStorage.setItem(
+    'TokenUser',
+    JSON.stringify({
+      token: result.token,
+      userId: result.userId,
+      userRole: result.userRole,
+    })
+  );
   router.push('/news');
 };
 

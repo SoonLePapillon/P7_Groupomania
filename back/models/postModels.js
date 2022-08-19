@@ -12,7 +12,8 @@ export const postModel = (sequelize, DataTypes) => {
       // allowNull : true est déjà par défaut
     },
     imageUrl: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   });
 };

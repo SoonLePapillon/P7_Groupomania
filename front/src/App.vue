@@ -19,7 +19,7 @@ const route = useRouter();
 
 const showHeader = computed(() => {
   // Computed est une fonction qui return forcément
-  return route.currentRoute.value.name === 'CreatePost' && 'News';
+  return route.currentRoute.value.name === 'News' || 'CreatePost';
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
