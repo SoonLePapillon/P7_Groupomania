@@ -47,18 +47,19 @@ const token = contentLS.token;
 
 const showUploadedImg = (event) => {
   const img = URL.createObjectURL(event.target.files[0]);
-  console.log(img);
   label.value.style.backgroundImage = `url(${img})`;
 };
 
 const test = async () => {
   if (textPost.value || input.value.value !== '') {
-    console.log(textPost.value + ' ' + input.value.value);
-    console.log('coucou');
+    const formData = new FormData();
+    console.log(input.value.files[0]);
+    formData.append('images', input.value.files[0]);
+    console.log(formData);
     const dataToken = token;
     const dataPost = {
       content: textPost.value,
-      imageUrl: input.value.value,
+      imageUrl: JSON.stringify(formData),
     };
     const result = await postStore.createOne(dataPost, dataToken);
     console.log(result);
@@ -71,7 +72,7 @@ const test = async () => {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   align-items: center;
   width: 95%;
   max-width: 1000px;

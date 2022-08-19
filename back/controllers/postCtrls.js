@@ -9,9 +9,9 @@ const postController = {
         const Post = await post.create({
           userId: req.auth.userId,
           content: req.body.content,
-          // imageUrl: `${req.protocol}://${req.get("host")}/images/${
-          //   req.file.filename
-          // }`,
+          imageUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
           createdBy: req.auth.userId,
         });
         res.status(200).send(Post);
