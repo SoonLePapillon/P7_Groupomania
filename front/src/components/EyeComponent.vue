@@ -2,7 +2,7 @@
   <fa
     icon="fa-solid fa-eye"
     class="eye"
-    v-bind:class="{
+    :class="{
       'red-first': props.type === 'password',
       'red-snd': props.type === 'text',
     }"

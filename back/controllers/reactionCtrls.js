@@ -36,18 +36,11 @@ const reactionController = {
             res.status(200).json({ message: "Réaction supprimée" });
           } else if (findReact.value !== req.body.value) {
             // S'il change de réaction
-            findReact.destroy(); // On supprime la réaction existante
-            try {
-              // Et on en créer une nouvelle
-              const React = await react.create({
-                userId: req.auth.userId,
-                postId: req.params.postId || req.body.postId,
-                value: req.body.value,
-              });
-              res.status(200).send(React);
-            } catch (err) {
-              res.status(400).send(err);
-            }
+            findReact.update({
+              // On l'update
+              value: req.body.value,
+            });
+            res.status(200).send(findReact);
           }
           break;
         }

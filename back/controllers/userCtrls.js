@@ -7,14 +7,14 @@ const userController = {
     bcrypt
       .hash(req.body.password, 10) // 10 tours de hashage
       .then((hash) => {
-        const User = new user({
-          email: req.body.email,
-          password: hash,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          isAdmin: req.body.isAdmin,
-        });
-        User.save()
+        user
+          .create({
+            email: req.body.email,
+            password: hash,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            isAdmin: req.body.isAdmin,
+          })
           .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
           .catch(() =>
             res.status(500).json({

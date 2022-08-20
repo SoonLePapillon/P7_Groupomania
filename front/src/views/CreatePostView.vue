@@ -18,6 +18,9 @@
           accept="image/png, image/jpg, image/jpeg"
           @change="showUploadedImg"
         />
+        <button @click="deleteImg" class="delete-img" v-if="isFileHere">
+          X
+        </button>
         <div>
           <p>
             <b> Cliquez pour insérer une image. </b>
@@ -32,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
@@ -44,10 +47,20 @@ const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = contentLS.userId;
 const userRole = contentLS.userRole;
 const token = contentLS.token;
+const isFileHere = ref(false);
+
+const deleteImg = () => {
+  input.value.value = null;
+  label.value.style.backgroundImage = '';
+  isFileHere.value = false;
+  label.value.innerText = '+';
+};
 
 const showUploadedImg = (event) => {
-  const img = URL.createObjectURL(event.target.files[0]);
-  label.value.style.backgroundImage = `url(${img})`;
+  isFileHere.value = true;
+  const image = URL.createObjectURL(event.target.files[0]);
+  label.value.style.backgroundImage = `url(${image})`;
+  label.value.innerText = '';
 };
 
 const test = async () => {
@@ -147,5 +160,14 @@ const test = async () => {
     margin-left: 15px;
     font-size: 14px;
   }
+}
+
+.delete-img {
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 0, 0, 0.514);
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 </style>

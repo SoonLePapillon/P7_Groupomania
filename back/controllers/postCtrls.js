@@ -6,30 +6,28 @@ const postController = {
     if (req.body.content === null && req.file === null) {
       res.status(400).json({ message: "Votre post ne peut pas être vide." });
     } else {
-      // try {
-      if (!req.file) {
-        const Post = await post.create({
-          userId: req.auth.userId,
-          content: req.body.content,
-          createdBy: req.auth.userId,
-        });
-        res.status(200).send(Post);
-      } else {
-        const Post = await post.create({
-          userId: req.auth.userId,
-          content: req.body.content,
-          imageUrl: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
-          createdBy: req.auth.userId,
-        });
-        res.status(200).send(Post);
+      try {
+        if (!req.file) {
+          const Post = await post.create({
+            userId: req.auth.userId,
+            content: req.body.content,
+            createdBy: req.auth.userId,
+          });
+          res.status(200).send(Post);
+        } else {
+          const Post = await post.create({
+            userId: req.auth.userId,
+            content: req.body.content,
+            imageUrl: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+            createdBy: req.auth.userId,
+          });
+          res.status(200).send(Post);
+        }
+      } catch (err) {
+        res.status(400).send(err);
       }
-
-      return;
-      // } catch (err) {
-      // res.status(400).send(err);
-      // }
     }
   },
   getOne: async (req, res) => {
@@ -65,21 +63,53 @@ const postController = {
     });
     if (
       findPost &&
-      req.auth.userId !== post.createdBy &&
+      req.auth.userId !== findPost.createdBy &&
       req.auth.role === false
     ) {
       res.status(401).json({ message: "You can't delete this post" });
     } else {
       try {
-        post.update({
-          content: req.body.content,
-          imageUrl: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
-        });
-        res.status(200).send(post);
+        if (req.file) {
+          // Si un fichier existe déjà sur le post trouvé
+          const filename = findPost.imageUrl.split("/images/")[1]; // On le supprime
+          fs.unlink(`images/${filename}`, () => {
+            if (req.file) {
+              // Si la modification comprend un nouveau fichier
+              try {
+                findPost.update({
+                  content: req.body.content,
+                  imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                    req.file.filename
+                  }`,
+                });
+                res.status(200).send(findPost);
+              } catch {
+                res.status(400).send(err);
+              }
+            } else {
+              try {
+                // Sinon, si elle ne comprend que du texte
+                findPost.update({
+                  content: req.body.content,
+                });
+                res.status(200).send(findPost);
+              } catch {
+                res.status(400).send(err);
+              }
+            }
+          });
+        } else {
+          // S'il nexiste pas de fichier sur le post trouvé
+          findPost.update({
+            content: req.body.content,
+            imageUrl: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          });
+          res.status(200).send(findPost);
+        }
       } catch (err) {
-        res.status(400).send(err);
+        res.status(500).send(err);
       }
     }
   },
@@ -89,7 +119,11 @@ const postController = {
         id: req.params.id,
       },
     });
-    if (findPost && req.auth.userId !== findPost.createdBy) {
+    if (
+      findPost &&
+      req.auth.userId !== findPost.createdBy &&
+      req.auth.role === false
+    ) {
       console.log(req.auth.userId);
       console.log(findPost.createdBy);
       res.status(401).json({ message: "You can't delete this post" });
