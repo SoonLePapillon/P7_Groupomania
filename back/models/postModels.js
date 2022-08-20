@@ -13,7 +13,6 @@ export const postModel = (sequelize, DataTypes) => {
     },
     imageUrl: {
       type: DataTypes.TEXT,
-      allowNull: true,
     },
   });
 };

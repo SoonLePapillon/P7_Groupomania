@@ -2,10 +2,19 @@ import { post } from "../db/dbconfig.js"; // sans les { } il ne reconnait pas po
 
 const postController = {
   createOne: async (req, res) => {
+    console.log("VOICI LE FICHIER " + req.file);
     if (req.body.content === null && req.body.imageURL === null) {
       res.status(400).json({ message: "Votre post ne peut pas être vide." });
     } else {
-      try {
+      // try {
+      if (!req.file) {
+        const Post = await post.create({
+          userId: req.auth.userId,
+          content: req.body.content,
+          createdBy: req.auth.userId,
+        });
+        res.status(200).send(Post);
+      } else {
         const Post = await post.create({
           userId: req.auth.userId,
           content: req.body.content,
@@ -15,9 +24,12 @@ const postController = {
           createdBy: req.auth.userId,
         });
         res.status(200).send(Post);
-      } catch (err) {
-        res.status(400).send(err);
       }
+
+      return;
+      // } catch (err) {
+      // res.status(400).send(err);
+      // }
     }
   },
   getOne: async (req, res) => {

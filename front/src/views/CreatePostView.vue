@@ -52,16 +52,11 @@ const showUploadedImg = (event) => {
 
 const test = async () => {
   if (textPost.value || input.value.value !== '') {
-    const formData = new FormData();
-    console.log(input.value.files[0]);
-    formData.append('images', input.value.files[0]);
-    console.log(formData);
     const dataToken = token;
-    const dataPost = {
-      content: textPost.value,
-      imageUrl: JSON.stringify(formData),
-    };
-    const result = await postStore.createOne(dataPost, dataToken);
+    const formData = new FormData();
+    formData.append('content', textPost.value);
+    formData.append('imageUrl', input.value.files[0]);
+    const result = await postStore.createOne(formData, dataToken);
     console.log(result);
   } else {
     console.log(token);

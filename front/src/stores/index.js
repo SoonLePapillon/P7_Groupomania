@@ -25,10 +25,9 @@ export const usePostStore = defineStore('post', {
     async createOne(data, token) {
       let response = await fetch('http://localhost:3000/api/posts/createOne', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       });

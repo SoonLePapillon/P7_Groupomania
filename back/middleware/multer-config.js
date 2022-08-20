@@ -12,10 +12,10 @@ const storage = multer.diskStorage({
     callback(null, "images");
   },
   filename: (req, file, callback) => {
-    const name = file.originalname.split(" ").join("_");
+    const name = file.originalname.split(" ").join("_").split(".")[0];
     const extension = MIME_TYPES[file.mimetype];
     callback(null, name + Date.now() + "." + extension);
   },
 });
 
-module.exports = multer({ storage: storage }).single("image"); // .single pour dire qu'il s'agit d'un fichier unique (et image signifie qu'il s'agit d'image uniquement)
+export default multer({ storage: storage }).single("imageUrl"); // .single pour dire qu'il s'agit d'un fichier unique (et image signifie qu'il s'agit d'image uniquement)
