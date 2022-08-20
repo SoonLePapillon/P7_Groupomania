@@ -46,7 +46,7 @@ react.belongsTo(user);
 
 ///// Synchronisation et mise à jour de la base de données
 sequelize
-  .sync()
+  .sync() // {alter : true} si j'ai besoin de mettre à jour ma BDD suite à un changement au niveau des modèles par ex.
   .then(() => {
     console.log("Connexion à la BDD réussie");
   })

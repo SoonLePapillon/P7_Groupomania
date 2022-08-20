@@ -28,6 +28,7 @@ export const usePostStore = defineStore('post', {
         body: data,
         headers: {
           Accept: 'application/json',
+          // 'Content-type':'application/json',
           Authorization: `Bearer ${token}`,
         },
       });

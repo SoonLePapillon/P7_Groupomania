@@ -1,4 +1,4 @@
-import { user } from "../db/dbconfig.js";
+import { user } from "../db/sequelize.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

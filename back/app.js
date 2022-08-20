@@ -8,8 +8,8 @@ import "dotenv/config";
 import path from "path";
 import url from "url";
 
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = url.fileURLToPath(import.meta.url); // Obligatoire car j'utilise
+const __dirname = path.dirname(__filename); // import et pas require
 
 const app = express();
 app.use("/images", express.static(path.join(__dirname, "images")));

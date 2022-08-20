@@ -1,9 +1,9 @@
-import { post } from "../db/dbconfig.js"; // sans les { } il ne reconnait pas posts car il n'a pas été exporté avec export default
+import { post } from "../db/sequelize.js"; // sans les { } il ne reconnait pas posts car il n'a pas été exporté avec export default
+import fs from "fs";
 
 const postController = {
   createOne: async (req, res) => {
-    console.log("VOICI LE FICHIER " + req.file);
-    if (req.body.content === null && req.body.imageURL === null) {
+    if (req.body.content === null && req.file === null) {
       res.status(400).json({ message: "Votre post ne peut pas être vide." });
     } else {
       // try {
@@ -89,16 +89,17 @@ const postController = {
         id: req.params.id,
       },
     });
-    if (
-      findPost &&
-      req.auth.userId !== Post.createdBy &&
-      req.auth.role === false
-    ) {
+    if (findPost && req.auth.userId !== findPost.createdBy) {
+      console.log(req.auth.userId);
+      console.log(findPost.createdBy);
       res.status(401).json({ message: "You can't delete this post" });
     } else {
       try {
-        Post.destroy();
-        res.status(200).json({ message: "Post deleted" });
+        const filename = findPost.imageUrl.split("/images/")[1];
+        fs.unlink(`images/${filename}`, () => {
+          findPost.destroy();
+          res.status(200).json({ message: "Post deleted" });
+        });
       } catch (err) {
         res.status(400).send(err);
       }

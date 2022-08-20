@@ -1,4 +1,4 @@
-import { react } from "../db/dbconfig.js";
+import { react } from "../db/sequelize.js";
 
 const reactionController = {
   react: async (req, res) => {
