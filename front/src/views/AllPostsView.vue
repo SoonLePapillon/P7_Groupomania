@@ -7,10 +7,17 @@
     ></ButtonFormComponent>
     <modal :show="showModal" @close="showModal = false"> </modal>
     <!-- :show sert à basculer la propriété display d'un élément -->
-    <div class="allPosts" v-for="post in allPosts" :key="post.id">
+    <div class="allPosts" v-for="post in allPosts" :key="post.id" :id="post.id">
+      <h2>{{ username }}</h2>
       <p>{{ post.content }}</p>
-      <img :src="post.imageUrl" />
+      <img :src="post.imageUrl" v-show="post.imageUrl !== null" />
       <button v-if="userId === post.createdBy">Modifier</button>
+      <button
+        v-if="userId === post.createdBy || userRole === true"
+        @click="deletePost(post.id, token)"
+      >
+        Supprimer
+      </button>
     </div>
   </div>
 </template>
@@ -25,13 +32,23 @@ const showModal = ref(false);
 const postStore = usePostStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = contentLS.userId;
+const token = contentLS.token;
+const username = contentLS.userName;
 
 let allPosts = ref([]);
+
+let date = new Date('2022-08-21T14:27:54.000Z');
+date.toISOString().split('T');
+console.log(date);
 
 const getPosts = async () => {
   const res = await postStore.getAll();
   allPosts.value = res;
-  console.log(allPosts);
+};
+
+const deletePost = async (postId, userToken) => {
+  await postStore.deleteOne(postId, userToken);
+  getPosts();
 };
 
 onMounted(() => {

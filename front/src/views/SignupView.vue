@@ -4,20 +4,20 @@
     <h2 class="signup__title">Créez votre compte</h2>
     <form class="signup__form">
       <input
-        name="lastName"
+        name="firstName"
         type="text"
         placeholder="Nom*"
         class="input small"
-        @input="testRegexp(lastName)"
-        ref="lastName"
+        @input="testRegexp(firstName)"
+        ref="firstName"
       />
       <input
-        name="firstName"
+        name="lastName"
         type="text"
         placeholder="Prénom*"
         class="input small"
-        @input="testRegexp(firstName)"
-        ref="firstName"
+        @input="testRegexp(lastName)"
+        ref="lastName"
       />
       <input
         name="email"
@@ -159,13 +159,20 @@ const validateForm = async (e) => {
       firstName: firstName.value.value,
       lastName: lastName.value.value,
     };
-    const x = await userStore.signup(data);
+    await userStore.signup(data);
     const result = await userStore.login(
       email.value.value,
       password.value.value
     );
-    console.log(result.token);
-    localStorage.setItem('TokenUser', result.token);
+    localStorage.setItem(
+      'TokenUser',
+      JSON.stringify({
+        token: result.token,
+        userId: result.userId,
+        userRole: result.userRole,
+        userName: result.userName,
+      })
+    );
     router.push('/news');
   }
 };

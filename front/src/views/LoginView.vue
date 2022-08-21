@@ -68,6 +68,7 @@ const submitUser = async (e) => {
       token: result.token,
       userId: result.userId,
       userRole: result.userRole,
+      userName: result.userName,
     })
   );
   router.push('/news');

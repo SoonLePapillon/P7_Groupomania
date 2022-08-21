@@ -129,11 +129,16 @@ const postController = {
       res.status(401).json({ message: "You can't delete this post" });
     } else {
       try {
-        const filename = findPost.imageUrl.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
+        if (findPost.imageUrl) {
+          const filename = findPost.imageUrl.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            findPost.destroy();
+            res.status(200).json({ message: "Post deleted" });
+          });
+        } else {
           findPost.destroy();
           res.status(200).json({ message: "Post deleted" });
-        });
+        }
       } catch (err) {
         res.status(400).send(err);
       }

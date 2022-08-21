@@ -27,6 +27,16 @@ export const usePostStore = defineStore('post', {
       const resData = await response.json();
       return resData;
     },
+    async deleteOne(id, token) {
+      await fetch(`http://localhost:3000/api/posts/deleteOne/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          // 'Content-type':'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
   },
 });
 

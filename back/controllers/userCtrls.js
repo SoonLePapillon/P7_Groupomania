@@ -49,7 +49,7 @@ const userController = {
               res.status(200).json({
                 userId: user.id,
                 userRole: user.isAdmin, // j'ai rajouté ça
-                userName: user.firstName,
+                userName: user.firstName + " " + user.lastName,
                 token: jwt.sign(
                   { userId: user.id, userRole: user.isAdmin },
                   process.env.TOKEN,
@@ -66,12 +66,6 @@ const userController = {
         res.status(500).json({ message: "Une erreur est survenue." })
       );
   },
-
-  // logout: (req,res) => {
-  //     let token = req.auth.token;
-  //     token = undefined;
-  //     res.status(200).send("Logout" + token)
-  //   }
 };
 
 export default userController;
