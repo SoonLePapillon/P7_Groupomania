@@ -20,11 +20,6 @@ const routes = [
     name: 'News',
     component: AllPosts,
   },
-  {
-    path: '/createpost',
-    name: 'CreatePost',
-    component: CreatePost,
-  },
 ];
 
 const router = createRouter({

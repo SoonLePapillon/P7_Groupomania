@@ -25,7 +25,7 @@ div {
   height: min-content !important;
 }
 button {
-  width: 290px;
+  width: 250px;
   height: 50px;
   background: #ff2a00f5;
   opacity: 0.9;
@@ -34,7 +34,7 @@ button {
   border: none;
   & > span {
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
     text-align: center;
     color: #ffffff;
   }

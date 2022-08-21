@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Nouvelle publication</h1>
+    <h1>Nouvau post</h1>
     <div class="createPost">
       <textarea
         class="createPost__textArea"
@@ -10,17 +10,19 @@
     </div>
     <div class="image-send">
       <div class="imageInfo">
-        <label for="image-input" id="custom-label" ref="label">+</label>
-        <input
-          ref="input"
-          id="image-input"
-          type="file"
-          accept="image/png, image/jpg, image/jpeg"
-          @change="showUploadedImg"
-        />
-        <button @click="deleteImg" class="delete-img" v-if="isFileHere">
-          X
-        </button>
+        <div class="previewImg">
+          <label for="image-input" id="custom-label" ref="label">+</label>
+          <input
+            ref="input"
+            id="image-input"
+            type="file"
+            accept="image/png, image/jpg, image/jpeg"
+            @change="showUploadedImg"
+          />
+          <button @click="deleteImg" class="delete-img" v-if="isFileHere">
+            X
+          </button>
+        </div>
         <div>
           <p>
             <b> Cliquez pour insérer une image. </b>
@@ -71,6 +73,7 @@ const test = async () => {
     formData.append('imageUrl', input.value.files[0]);
     const result = await postStore.createOne(formData, dataToken);
     console.log(result);
+    window.location.reload();
   } else {
     console.log(token);
   }
@@ -81,13 +84,10 @@ const test = async () => {
 .container {
   display: flex;
   flex-flow: column nowrap;
+  justify-content: center;
   align-items: center;
-  width: 95%;
-  max-width: 1000px;
-  height: 75vh;
-  margin-top: 50px;
-  border-left: 1px solid rgba(0, 0, 0, 0.096);
-  border-right: 1px solid rgba(0, 0, 0, 0.096);
+  width: 100%;
+  height: 100%;
   background-color: white;
   border-radius: 15px;
   & h1 {
@@ -103,7 +103,7 @@ const test = async () => {
   max-width: 1000px;
   height: 30%;
   & textarea {
-    height: 80%;
+    height: 100%;
     width: 100%;
     border: none;
     outline: none;
@@ -137,7 +137,7 @@ const test = async () => {
     justify-content: center;
     align-items: center;
     font-size: 55px;
-    width: 130px;
+    width: 100px;
     height: 100px;
     opacity: 0.8;
     left: 10px;
@@ -155,6 +155,9 @@ const test = async () => {
       transition: 0.1s;
     }
   }
+  .previewImg {
+    position: relative;
+  }
   p {
     max-width: 400px;
     margin-left: 15px;
@@ -163,11 +166,24 @@ const test = async () => {
 }
 
 .delete-img {
-  width: 30px;
-  height: 30px;
-  background-color: rgba(255, 0, 0, 0.514);
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  background-color: rgba(255, 0, 0, 0.63);
+  border: 1px solid rgba(255, 255, 255, 0.103);
   color: white;
-  border: 1px solid black;
   border-radius: 5px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@media all and (min-width: 700px) {
+  #custom-label {
+    width: 130px !important;
+    height: 110px !important;
+  }
 }
 </style>

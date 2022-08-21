@@ -2,7 +2,9 @@
   <header v-if="showHeader" class="header">
     <div class="logo"><img src="../src/assets/logo.jpg" /></div>
     <nav>
-      <router-link to="/" class="logout">Déconnexion</router-link>
+      <router-link to="/" class="logout" @click="logout"
+        >Déconnexion</router-link
+      >
     </nav>
   </header>
 
@@ -12,14 +14,22 @@
 <script setup>
 // setup sert à passer à l'api composition (en gros)
 
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();
+const logoutBtn = ref(null);
+const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
+
+const logout = () => {
+  window.localStorage.length > 0
+    ? window.localStorage.clear()
+    : console.log('Y A R frérot');
+};
 
 const showHeader = computed(() => {
   // Computed est une fonction qui return forcément
-  return route.currentRoute.value.name === 'News' || 'CreatePost';
+  return route.currentRoute.value.name === 'News';
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
