@@ -6,16 +6,14 @@
           X
         </button>
         <div class="modal__body">
-          <h1
-            :title="modaleMode === 'create' ? 'Nouveau post' : 'Titre 2'"
-          ></h1>
+          <h1>{{ title }}</h1>
           <div class="modal__textarea">
             <textarea
               class="post_textarea"
-              placeholder="Exprimez-vous !"
-              v-model="textPost"
+              placeholder="Écrivez-ici"
+              ref="contentPost"
+              >{{ content }}</textarea
             >
-            </textarea>
           </div>
           <div class="image-send">
             <div class="imageInfo">
@@ -52,23 +50,28 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  show: Boolean,
-});
-
-////////////////////////////////////////////////
-
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
+const props = defineProps({
+  show: {
+    type: Boolean,
+  },
+  title: {
+    type: String,
+  },
+  content: {
+    type: String,
+  },
+});
+
 const input = ref(null);
 const label = ref(null);
-const textPost = ref(null);
+const contentPost = ref(null);
+// const textPost = ref(); // v-model : textPost
 const postStore = usePostStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const userId = contentLS.userId;
-const userRole = contentLS.userRole;
 const token = contentLS.token;
 const isFileHere = ref(false);
 
@@ -87,10 +90,10 @@ const showUploadedImg = (event) => {
 };
 
 const test = async () => {
-  if (textPost.value || input.value.value !== '') {
+  if (contentPost.value.value || input.value.value !== '') {
     const dataToken = token;
     const formData = new FormData();
-    formData.append('content', textPost.value);
+    formData.append('content', contentPost.value.value);
     formData.append('imageUrl', input.value.files[0]);
     const result = await postStore.createOne(formData, dataToken);
     console.log(result);

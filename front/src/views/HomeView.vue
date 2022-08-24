@@ -34,12 +34,17 @@
           Supprimer
         </button>
       </div>
+      <PostModal
+        :show="showPostModal"
+        @close="showPostModal = false"
+        :title="modalMode === 'create' ? 'Créer' : 'Modifier'"
+        :content="modalMode === 'create' ? '' : post.content"
+      >
+        <!-- <template v-slot:titre v-if="modalMode === 'create'">Create</template>
+    <template v-slot:titre v-if="modalMode === 'modify'">Modify</template> -->
+      </PostModal>
     </section>
   </div>
-  <PostModal :show="showPostModal" @close="showPostModal = false">
-    <!-- <template v-slot:titre v-if="modalMode === 'create'">Create</template>
-    <template v-slot:titre v-if="modalMode === 'modify'">Modify</template> -->
-  </PostModal>
   <!-- :show sert à basculer la propriété display d'un élément -->
 </template>
 
@@ -55,14 +60,8 @@ const userId = contentLS.userId;
 const token = contentLS.token;
 const username = contentLS.userName;
 const showPostModal = ref(false);
-let allPosts = ref([]);
 const modalMode = ref(null);
-
-const props = defineProps({
-  title: {
-    type: String,
-  },
-});
+let allPosts = ref([]);
 
 const getPosts = async () => {
   const res = await postStore.getAll();
