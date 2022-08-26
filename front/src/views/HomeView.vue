@@ -2,15 +2,12 @@
   <div class="news">
     <ButtonFormComponent
       class="show-modal"
-      @click="
-        showCreateModal = true;
-        modalMode = 'create';
-      "
+      @click="showCreateModal = true"
       text="Nouveau post"
     ></ButtonFormComponent>
     <PostModal
       :show="showCreateModal"
-      @close="showCreateModal = false"
+      @close="closeCreateModal"
       :title="'Créez votre poste'"
       :content="null"
     >
@@ -33,7 +30,10 @@
         </button>
         <PostModal
           :show="showModifyModal"
-          @close="showModifyModal = false"
+          @close="
+            showModifyModal = false;
+            getPosts();
+          "
           :title="'Modifier'"
           :content="post.content"
           :url="post.imageUrl"
@@ -52,24 +52,30 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import PostModal from '../views/PostModalView.vue';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
+const allPosts = ref([]);
 const postStore = usePostStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = contentLS.userId;
 const token = contentLS.token;
 const username = contentLS.userName;
-const showCreateModal = ref(false);
-const showModifyModal = ref(false);
-let allPosts = ref([]);
+let showCreateModal = ref(false);
+let showModifyModal = ref(false);
 
 /* Fonction d'affichage des posts */
 const getPosts = async () => {
-  const res = await postStore.getAll();
-  allPosts.value = res;
+  await postStore.getAll();
+  allPosts.value = postStore.posts;
+};
+
+const closeCreateModal = async () => {
+  showCreateModal.value = false;
+  await nextTick(); // Attend le prochain cycle de màj Vue (50 ms environ)
+  getPosts();
 };
 
 const deletePost = async (postId, userToken) => {

@@ -11,9 +11,8 @@
             <textarea
               class="post_textarea"
               placeholder="Écrivez-ici"
-              ref="contentPost"
-              >{{ content }}</textarea
-            >
+              v-model="contentPost"
+            ></textarea>
           </div>
           <div class="image-send">
             <div class="imageInfo">
@@ -46,7 +45,10 @@
             </div>
             <ButtonFormComponent
               text="Publier"
-              @click="test"
+              @click="
+                createPost();
+                $emit('close');
+              "
             ></ButtonFormComponent>
           </div>
         </div>
@@ -56,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
@@ -77,7 +79,7 @@ const props = defineProps({
 
 const input = ref(null);
 const label = ref(null);
-const contentPost = ref(null);
+const contentPost = ref(props.content);
 const postStore = usePostStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const token = contentLS.token;
@@ -97,17 +99,15 @@ const showUploadedImg = (event) => {
   label.value.innerText = '';
 };
 
-const test = async () => {
-  if (contentPost.value.value || input.value.value !== '') {
+const createPost = async () => {
+  if (contentPost.value || input.value.value !== '') {
     const dataToken = token;
     const formData = new FormData();
-    formData.append('content', contentPost.value.value);
+    formData.append('content', contentPost.value);
     formData.append('imageUrl', input.value.files[0]);
-    const result = await postStore.createOne(formData, dataToken);
-    console.log(result);
-    window.location.reload();
+    await postStore.createOne(formData, dataToken);
+    contentPost.value = null;
   } else {
-    console.log(token);
   }
 };
 </script>

@@ -1,6 +1,15 @@
 import { defineStore } from 'pinia';
 
 export const usePostStore = defineStore('post', {
+  id: 'Post',
+  state: () => ({
+    posts: [],
+  }),
+  getters: {
+    getPosts: (state) => {
+      return state.posts;
+    },
+  },
   actions: {
     async getOne(id) {
       let response = await fetch(
@@ -12,10 +21,10 @@ export const usePostStore = defineStore('post', {
     async getAll() {
       let response = await fetch('http://localhost:3000/api/posts/getAll');
       let data = await response.json();
-      return data;
+      this.posts = data;
     },
     async createOne(data, token) {
-      let response = await fetch('http://localhost:3000/api/posts/createOne', {
+      await fetch('http://localhost:3000/api/posts/createOne', {
         method: 'POST',
         body: data,
         headers: {
@@ -24,8 +33,7 @@ export const usePostStore = defineStore('post', {
           Authorization: `Bearer ${token}`,
         },
       });
-      const resData = await response.json();
-      return resData;
+      await this.getAll();
     },
     async deleteOne(id, token) {
       await fetch(`http://localhost:3000/api/posts/deleteOne/${id}`, {
