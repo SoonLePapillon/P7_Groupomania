@@ -3,30 +3,42 @@
     <ButtonFormComponent
       class="show-modal"
       @click="
-        showPostModal = true;
+        showCreateModal = true;
         modalMode = 'create';
       "
       text="Nouveau post"
     ></ButtonFormComponent>
+    <PostModal
+      :show="showCreateModal"
+      @close="showCreateModal = false"
+      :title="'Créez votre poste'"
+      :content="null"
+    >
+    </PostModal>
     <section
       class="allPosts"
       v-for="post in allPosts"
       :key="post.id"
       :id="post.id"
     >
-      <div class="onePost">
+      <div class="onePost" :id="post.id">
         <h2>{{ username }}</h2>
         <p>{{ post.content }}</p>
         <img :src="post.imageUrl" v-show="post.imageUrl !== null" />
         <button
           v-if="userId === post.createdBy || userRole"
-          @click="
-            showPostModal = true;
-            modalMode = 'modify';
-          "
+          @click="showModifyModal = true"
         >
           Modifier
         </button>
+        <PostModal
+          :show="showModifyModal"
+          @close="showModifyModal = false"
+          :title="'Modifier'"
+          :content="post.content"
+          :url="post.imageUrl"
+        >
+        </PostModal>
         <button
           v-if="userId === post.createdBy || userRole"
           @click="deletePost(post.id, token)"
@@ -34,22 +46,13 @@
           Supprimer
         </button>
       </div>
-      <PostModal
-        :show="showPostModal"
-        @close="showPostModal = false"
-        :title="modalMode === 'create' ? 'Créer' : 'Modifier'"
-        :content="modalMode === 'create' ? '' : post.content"
-      >
-        <!-- <template v-slot:titre v-if="modalMode === 'create'">Create</template>
-    <template v-slot:titre v-if="modalMode === 'modify'">Modify</template> -->
-      </PostModal>
     </section>
   </div>
   <!-- :show sert à basculer la propriété display d'un élément -->
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import PostModal from '../views/PostModalView.vue';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
@@ -59,10 +62,11 @@ const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = contentLS.userId;
 const token = contentLS.token;
 const username = contentLS.userName;
-const showPostModal = ref(false);
-const modalMode = ref(null);
+const showCreateModal = ref(false);
+const showModifyModal = ref(false);
 let allPosts = ref([]);
 
+/* Fonction d'affichage des posts */
 const getPosts = async () => {
   const res = await postStore.getAll();
   allPosts.value = res;

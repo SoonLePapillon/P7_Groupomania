@@ -18,7 +18,13 @@
           <div class="image-send">
             <div class="imageInfo">
               <div class="previewImg">
-                <label for="image-input" id="custom-label" ref="label">+</label>
+                <label
+                  for="image-input"
+                  id="custom-label"
+                  ref="label"
+                  :style="`background-image:url(${url})`"
+                  >+</label
+                >
                 <input
                   ref="input"
                   id="image-input"
@@ -50,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
@@ -64,12 +70,14 @@ const props = defineProps({
   content: {
     type: String,
   },
+  url: {
+    type: String,
+  },
 });
 
 const input = ref(null);
 const label = ref(null);
 const contentPost = ref(null);
-// const textPost = ref(); // v-model : textPost
 const postStore = usePostStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const token = contentLS.token;
