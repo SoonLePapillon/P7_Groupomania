@@ -1,3 +1,71 @@
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { usePostStore } from '../stores/index.js';
+import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+  },
+  title: {
+    type: String,
+  },
+  post: {
+    type: Object,
+  },
+});
+
+const input = ref(null);
+const label = ref(null);
+const postData = ref({});
+const postStore = usePostStore();
+const isFileHere = ref(false);
+
+const deleteImg = () => {
+  input.value.value = null;
+  label.value.style.backgroundImage = '';
+  isFileHere.value = false;
+  label.value.innerText = '+';
+};
+
+const showUploadedImg = (event) => {
+  isFileHere.value = true;
+  const image = URL.createObjectURL(event.target.files[0]);
+  label.value.style.backgroundImage = `url(${image})`;
+  label.value.innerText = '';
+};
+
+const createPost = async () => {
+  if (postData.value.content || input.value.value !== '') {
+    const formData = new FormData();
+    if (postData.value.content) {
+      formData.append('content', postData.value.content);
+    }
+    if (input.value.value) {
+      formData.append('imageUrl', input.value.files[0]);
+    }
+    await postStore.createOne(formData);
+  } else {
+  }
+};
+
+// Observe les changements de visibilité de la modal pour reset l'objet post
+watch(
+  () => props.show,
+  async (newShow) => {
+    //newShow représente la nouvelle valeur qu'a pris la props show
+    if (newShow && props.post) {
+      postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 obj pour éviter que si l'on modife un, l'autre se modifie aussi
+    }
+  }
+);
+onMounted(() => {
+  if (props.post) {
+    postData.value = { ...props.post };
+  }
+});
+</script>
+
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal__layer">
@@ -11,7 +79,8 @@
             <textarea
               class="post_textarea"
               placeholder="Écrivez-ici"
-              v-model="contentPost"
+              v-model="postData.content"
+              maxlength="560"
             ></textarea>
           </div>
           <div class="image-send">
@@ -21,7 +90,7 @@
                   for="image-input"
                   id="custom-label"
                   ref="label"
-                  :style="`background-image:url(${url})`"
+                  :style="`background-image:url(${postData.imageUrl})`"
                   >+</label
                 >
                 <input
@@ -60,60 +129,6 @@
     </div>
   </Transition>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { usePostStore } from '../stores/index.js';
-import ButtonFormComponent from '../components/ButtonFormComponent.vue';
-
-const props = defineProps({
-  show: {
-    type: Boolean,
-  },
-  title: {
-    type: String,
-  },
-  content: {
-    type: String,
-  },
-  url: {
-    type: String,
-  },
-});
-
-const input = ref(null);
-const label = ref(null);
-const contentPost = ref(props.content);
-const postStore = usePostStore();
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const token = contentLS.token;
-const isFileHere = ref(false);
-
-const deleteImg = () => {
-  input.value.value = null;
-  label.value.style.backgroundImage = '';
-  isFileHere.value = false;
-  label.value.innerText = '+';
-};
-
-const showUploadedImg = (event) => {
-  isFileHere.value = true;
-  const image = URL.createObjectURL(event.target.files[0]);
-  label.value.style.backgroundImage = `url(${image})`;
-  label.value.innerText = '';
-};
-
-const createPost = async () => {
-  if (contentPost.value || input.value.value !== '') {
-    const dataToken = token;
-    const formData = new FormData();
-    formData.append('content', contentPost.value);
-    formData.append('imageUrl', input.value.files[0]);
-    await postStore.createOne(formData, dataToken);
-  } else {
-  }
-};
-</script>
 
 <style lang="scss">
 .modal__layer {

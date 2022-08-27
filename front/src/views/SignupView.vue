@@ -1,85 +1,3 @@
-<template>
-  <logo-component></logo-component>
-  <div class="signup">
-    <h2 class="signup__title">Créez votre compte</h2>
-    <form class="signup__form">
-      <input
-        name="firstName"
-        type="text"
-        placeholder="Nom*"
-        class="input small"
-        @input="testRegexp(firstName)"
-        ref="firstName"
-      />
-      <input
-        name="lastName"
-        type="text"
-        placeholder="Prénom*"
-        class="input small"
-        @input="testRegexp(lastName)"
-        ref="lastName"
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Adresse mail*"
-        class="input large"
-        @input="testRegexp(email)"
-        ref="email"
-      />
-      <div>
-        <input
-          id="password"
-          name="password"
-          :type="inputType"
-          placeholder="Mot de passe*"
-          class="input large"
-          @input="
-            testRegexp(password);
-            checkPassword();
-          "
-          ref="password"
-        />
-        <eye-component :type="inputType" :click="showPassword"></eye-component>
-        <p class="signup__form__passwordInfo">
-          Doit contenir une majuscule, un chiffre et un caractère spécial (8
-          caractères minimum)
-        </p>
-      </div>
-      <div>
-        <input
-          id="passwordConfirm"
-          name="password"
-          type="password"
-          placeholder="Confirmez votre mot de passe*"
-          class="input large"
-          @input="
-            testRegexp(passwordConfirm);
-            checkPassword();
-          "
-          ref="passwordConfirm"
-        />
-      </div>
-
-      <div class="errorDiv">
-        <p ref="errorMsg" class="signup__form__errorMessage"></p>
-      </div>
-
-      <button-form-component
-        text="Envoyer"
-        @click="validateForm"
-      ></button-form-component>
-    </form>
-    <footer>
-      <text-bottom-form-component
-        question="Déjà inscrit ?"
-        response="Connectez-vous !"
-        url="/"
-      ></text-bottom-form-component>
-    </footer>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '../stores/index.js';
@@ -178,6 +96,87 @@ const validateForm = async (e) => {
 };
 </script>
 
+<template>
+  <logo-component></logo-component>
+  <div class="signup">
+    <h2 class="signup__title">Créez votre compte</h2>
+    <form class="signup__form">
+      <input
+        name="firstName"
+        type="text"
+        placeholder="Nom*"
+        class="input small"
+        @input="testRegexp(firstName)"
+        ref="firstName"
+      />
+      <input
+        name="lastName"
+        type="text"
+        placeholder="Prénom*"
+        class="input small"
+        @input="testRegexp(lastName)"
+        ref="lastName"
+      />
+      <input
+        name="email"
+        type="email"
+        placeholder="Adresse mail*"
+        class="input large"
+        @input="testRegexp(email)"
+        ref="email"
+      />
+      <div>
+        <input
+          id="password"
+          name="password"
+          :type="inputType"
+          placeholder="Mot de passe*"
+          class="input large"
+          @input="
+            testRegexp(password);
+            checkPassword();
+          "
+          ref="password"
+        />
+        <eye-component :type="inputType" :click="showPassword"></eye-component>
+        <p class="signup__form__passwordInfo">
+          Doit contenir une majuscule, un chiffre et un caractère spécial (8
+          caractères minimum)
+        </p>
+      </div>
+      <div>
+        <input
+          id="passwordConfirm"
+          name="password"
+          type="password"
+          placeholder="Confirmez votre mot de passe*"
+          class="input large"
+          @input="
+            testRegexp(passwordConfirm);
+            checkPassword();
+          "
+          ref="passwordConfirm"
+        />
+      </div>
+
+      <div class="errorDiv">
+        <p ref="errorMsg" class="signup__form__errorMessage"></p>
+      </div>
+
+      <button-form-component
+        text="Envoyer"
+        @click="validateForm"
+      ></button-form-component>
+    </form>
+    <footer>
+      <text-bottom-form-component
+        question="Déjà inscrit ?"
+        response="Connectez-vous !"
+        url="/"
+      ></text-bottom-form-component>
+    </footer>
+  </div>
+</template>
 <style lang="scss">
 .signup {
   background-color: white;

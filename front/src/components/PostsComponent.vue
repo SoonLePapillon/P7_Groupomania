@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <div class="post">
     <header>
@@ -17,7 +19,5 @@
     </main>
   </div>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped></style>

@@ -1,15 +1,3 @@
-<template>
-  <fa
-    icon="fa-solid fa-eye"
-    class="eye"
-    :class="{
-      'red-first': props.type === 'password',
-      'red-snd': props.type === 'text',
-    }"
-    @click="props.click"
-  />
-</template>
-
 <script setup>
 const props = defineProps({
   type: {
@@ -21,6 +9,18 @@ const props = defineProps({
   },
 });
 </script>
+
+<template>
+  <fa
+    icon="fa-solid fa-eye"
+    class="eye"
+    :class="{
+      'red-first': props.type === 'password',
+      'red-snd': props.type === 'text',
+    }"
+    @click="props.click"
+  />
+</template>
 
 <style lang="scss" scoped>
 .eye {

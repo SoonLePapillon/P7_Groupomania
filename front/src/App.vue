@@ -14,7 +14,7 @@
 <script setup>
 // setup sert à passer à l'api composition (en gros)
 
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();
@@ -33,11 +33,6 @@ const showHeader = computed(() => {
 });
 
 // method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
-
-onMounted(() => {
-  // onmounted = au chargement de la page
-  console.log(route.currentRoute.value.name);
-});
 </script>
 
 <style lang="scss">
