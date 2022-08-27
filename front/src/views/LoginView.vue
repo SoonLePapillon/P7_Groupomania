@@ -62,6 +62,9 @@ const isFormFilled = computed(() => {
 const submitUser = async (e) => {
   e.preventDefault();
   const result = await userStore.login(email.value, password.value);
+  if (localStorage !== null) {
+    localStorage.clear();
+  }
   localStorage.setItem(
     'TokenUser',
     JSON.stringify({

@@ -31,7 +31,11 @@
                   accept="image/png, image/jpg, image/jpeg"
                   @change="showUploadedImg"
                 />
-                <button @click="deleteImg" class="delete-img" v-if="isFileHere">
+                <button
+                  @click="deleteImg;"
+                  class="delete-img"
+                  v-if="isFileHere"
+                >
                   X
                 </button>
               </div>
@@ -106,7 +110,6 @@ const createPost = async () => {
     formData.append('content', contentPost.value);
     formData.append('imageUrl', input.value.files[0]);
     await postStore.createOne(formData, dataToken);
-    contentPost.value = null;
   } else {
   }
 };
