@@ -1,15 +1,3 @@
-<script setup>
-const props = defineProps({
-  type: {
-    type: String,
-    required: true,
-  },
-  click: {
-    type: Function,
-  },
-});
-</script>
-
 <template>
   <fa
     icon="fa-solid fa-eye"
@@ -21,6 +9,18 @@ const props = defineProps({
     @click="props.click"
   />
 </template>
+
+<script setup>
+const props = defineProps({
+  type: {
+    type: String,
+    required: true,
+  },
+  click: {
+    type: Function,
+  },
+});
+</script>
 
 <style lang="scss" scoped>
 .eye {

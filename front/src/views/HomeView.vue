@@ -1,44 +1,3 @@
-<script setup>
-import { ref, onMounted, nextTick } from 'vue';
-import { usePostStore } from '../stores/index.js';
-import PostModal from '../views/PostModalView.vue';
-import ButtonFormComponent from '../components/ButtonFormComponent.vue';
-
-const postStore = usePostStore();
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const userId = contentLS.userId;
-const token = contentLS.token;
-const username = contentLS.userName;
-let showCreateModal = ref(false);
-let showModifyModal = ref(false);
-const postToModify = ref(null);
-
-const modifyPost = async (id) => {
-  postToModify.value = postStore.posts.find((post) => post.id === id);
-  showModifyModal.value = true;
-  await nextTick();
-};
-/* Fonction d'affichage des posts */
-const getPosts = async () => {
-  await postStore.getAll();
-};
-
-const closeCreateModal = async () => {
-  showCreateModal.value = false;
-  await nextTick(); // Attend le prochain cycle de màj Vue (50 ms environ)
-  getPosts();
-};
-
-const deletePost = async (postId, token) => {
-  await postStore.deleteOne(postId, token);
-  getPosts();
-};
-
-onMounted(() => {
-  getPosts();
-});
-</script>
-
 <template>
   <div id="news">
     <header id="news__header">
@@ -99,6 +58,47 @@ onMounted(() => {
   </div>
   <!-- :show sert à basculer la propriété display d'un élément -->
 </template>
+
+<script setup>
+import { ref, onMounted, nextTick } from 'vue';
+import { usePostStore } from '../stores/index.js';
+import PostModal from '../views/PostModalView.vue';
+import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+
+const postStore = usePostStore();
+const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
+const userId = contentLS.userId;
+const token = contentLS.token;
+const username = contentLS.userName;
+let showCreateModal = ref(false);
+let showModifyModal = ref(false);
+const postToModify = ref(null);
+
+const modifyPost = async (id) => {
+  postToModify.value = postStore.posts.find((post) => post.id === id);
+  showModifyModal.value = true;
+  await nextTick();
+};
+/* Fonction d'affichage des posts */
+const getPosts = async () => {
+  await postStore.getAll();
+};
+
+const closeCreateModal = async () => {
+  showCreateModal.value = false;
+  await nextTick(); // Attend le prochain cycle de màj Vue (50 ms environ)
+  getPosts();
+};
+
+const deletePost = async (postId, token) => {
+  await postStore.deleteOne(postId, token);
+  getPosts();
+};
+
+onMounted(() => {
+  getPosts();
+});
+</script>
 
 <style lang="scss" scoped>
 #news {

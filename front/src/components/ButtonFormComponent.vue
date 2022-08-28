@@ -1,3 +1,11 @@
+<template>
+  <div>
+    <button :disabled="disabled">
+      <span>{{ text }}</span>
+    </button>
+  </div>
+</template>
+
 <script setup>
 defineProps({
   text: {
@@ -9,14 +17,6 @@ defineProps({
   },
 });
 </script>
-
-<template>
-  <div>
-    <button :disabled="disabled">
-      <span>{{ text }}</span>
-    </button>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 div {

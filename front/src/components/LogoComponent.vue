@@ -1,10 +1,10 @@
-<script setup></script>
-
 <template>
   <div class="logo">
     <img src="../assets/icon-left-font-monochrome-black.png" />
   </div>
 </template>
+
+<script setup></script>
 
 <style lang="scss" scoped>
 .logo {

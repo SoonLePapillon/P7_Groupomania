@@ -1,3 +1,49 @@
+<template>
+  <logo-component></logo-component>
+  <div class="login">
+    <h2 class="login__title">Connexion</h2>
+    <form class="login__form">
+      <div class="login__form__email">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          placeholder="Adresse mail*"
+          name="email"
+          id="email"
+          ref="email"
+          @input="testRegexp(email)"
+        />
+      </div>
+      <div class="mot_de_passe">
+        <label for="password">Mot de passe</label>
+        <input
+          :type="inputType"
+          placeholder="Mot de passe*"
+          name="password"
+          id="password"
+          ref="password"
+          @input="testRegexp(password)"
+        />
+        <eye-component :type="inputType" :click="showPassword"></eye-component>
+      </div>
+      <p class="error" v-if="userNotFound">Utilisateur non trouvé.</p>
+      <button-form-component
+        text="Se connecter"
+        id="submitButton"
+        @click="submitUser"
+        :disabled="isFormFilled"
+      ></button-form-component>
+    </form>
+    <footer>
+      <text-bottom-form-component
+        question="Pas de compte ?"
+        response="Inscrivez-vous !"
+        url="/signup"
+      ></text-bottom-form-component>
+    </footer>
+  </div>
+</template>
+
 <script setup>
 import { ref, computed } from 'vue';
 import { useUserStore } from '../stores/index.js';
@@ -78,52 +124,6 @@ const submitUser = async (e) => {
   }
 };
 </script>
-
-<template>
-  <logo-component></logo-component>
-  <div class="login">
-    <h2 class="login__title">Connexion</h2>
-    <form class="login__form">
-      <div class="login__form__email">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          placeholder="Adresse mail*"
-          name="email"
-          id="email"
-          ref="email"
-          @input="testRegexp(email)"
-        />
-      </div>
-      <div class="mot_de_passe">
-        <label for="password">Mot de passe</label>
-        <input
-          :type="inputType"
-          placeholder="Mot de passe*"
-          name="password"
-          id="password"
-          ref="password"
-          @input="testRegexp(password)"
-        />
-        <eye-component :type="inputType" :click="showPassword"></eye-component>
-      </div>
-      <p class="error" v-if="userNotFound">Utilisateur non trouvé.</p>
-      <button-form-component
-        text="Se connecter"
-        id="submitButton"
-        @click="submitUser"
-        :disabled="isFormFilled"
-      ></button-form-component>
-    </form>
-    <footer>
-      <text-bottom-form-component
-        question="Pas de compte ?"
-        response="Inscrivez-vous !"
-        url="/signup"
-      ></text-bottom-form-component>
-    </footer>
-  </div>
-</template>
 
 <style lang="scss">
 .login {

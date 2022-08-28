@@ -1,3 +1,8 @@
+<template>
+  <p class="question">{{ question }}</p>
+  <router-link class="response" :to="url">{{ response }}</router-link>
+</template>
+
 <script setup>
 defineProps({
   question: {
@@ -14,11 +19,6 @@ defineProps({
   },
 });
 </script>
-
-<template>
-  <p class="question">{{ question }}</p>
-  <router-link class="response" :to="url">{{ response }}</router-link>
-</template>
 
 <style lang="scss" scoped>
 .question {

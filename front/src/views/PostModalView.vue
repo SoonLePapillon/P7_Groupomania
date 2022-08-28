@@ -1,73 +1,3 @@
-<script setup>
-import { ref, onMounted, watch } from 'vue';
-import { usePostStore } from '../stores/index.js';
-import ButtonFormComponent from '../components/ButtonFormComponent.vue';
-
-const props = defineProps({
-  show: {
-    type: Boolean,
-  },
-  title: {
-    type: String,
-  },
-  post: {
-    type: Object,
-  },
-});
-
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const token = contentLS.token;
-const input = ref(null);
-const label = ref(null);
-const postData = ref({});
-const postStore = usePostStore();
-const isFileHere = ref(false);
-
-const deleteImg = () => {
-  input.value.value = null;
-  label.value.style.backgroundImage = '';
-  isFileHere.value = false;
-  label.value.innerText = '+';
-};
-
-const showUploadedImg = (event) => {
-  isFileHere.value = true;
-  const image = URL.createObjectURL(event.target.files[0]);
-  label.value.style.backgroundImage = `url(${image})`;
-  label.value.innerText = '';
-};
-
-const createPost = async () => {
-  if (postData.value.content || input.value.value !== '') {
-    const formData = new FormData();
-    if (postData.value.content) {
-      formData.append('content', postData.value.content);
-    }
-    if (input.value.value) {
-      formData.append('imageUrl', input.value.files[0]);
-    }
-    await postStore.createOne(formData, token);
-  } else {
-  }
-};
-
-// Observe les changements de visibilité de la modal pour reset l'objet post
-watch(
-  () => props.show,
-  async (newShow) => {
-    //newShow représente la nouvelle valeur qu'a pris la props show
-    if (newShow && props.post) {
-      postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 obj pour éviter que si l'on modife un, l'autre se modifie aussi
-    }
-  }
-);
-onMounted(() => {
-  if (props.post) {
-    postData.value = { ...props.post };
-  }
-});
-</script>
-
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal__layer">
@@ -93,7 +23,7 @@ onMounted(() => {
                   id="custom-label"
                   ref="label"
                   :style="`background-image:url(${postData.imageUrl})`"
-                  >+</label
+                  ><span v-if="!postData.imageUrl">+</span></label
                 >
                 <input
                   ref="input"
@@ -102,13 +32,7 @@ onMounted(() => {
                   accept="image/png, image/jpg, image/jpeg"
                   @change="showUploadedImg"
                 />
-                <button
-                  @click="deleteImg;"
-                  class="delete-img"
-                  v-if="isFileHere"
-                >
-                  X
-                </button>
+                <button @click="deleteImg()" class="delete-img">X</button>
               </div>
               <div>
                 <p>
@@ -131,6 +55,75 @@ onMounted(() => {
     </div>
   </Transition>
 </template>
+
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { usePostStore } from '../stores/index.js';
+import ButtonFormComponent from '../components/ButtonFormComponent.vue';
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+  },
+  title: {
+    type: String,
+  },
+  post: {
+    type: Object,
+  },
+});
+
+const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
+const postStore = usePostStore();
+const token = contentLS.token;
+const input = ref(null);
+const label = ref(null);
+const postData = ref({});
+
+/* Affiche la preview du fichier (l'image) uploadé  */
+const showUploadedImg = (event) => {
+  const image = URL.createObjectURL(event.target.files[0]);
+  label.value.style.backgroundImage = `url(${image})`;
+  label.value.innerText = '';
+};
+
+/* Supprime le fichier uploadé de l'input et du label qui sert de preview */
+const deleteImg = () => {
+  input.value.value = null;
+  label.value.style.backgroundImage = '';
+  label.value.innerText = '+';
+};
+
+const createPost = async () => {
+  if (postData.value.content || input.value.value !== '') {
+    const formData = new FormData();
+    if (postData.value.content) {
+      formData.append('content', postData.value.content);
+    }
+    if (input.value.value) {
+      formData.append('imageUrl', input.value.files[0]);
+    }
+    await postStore.createOne(formData, token);
+  } else {
+  }
+};
+
+/* Observe les changements de visibilité de la modal pour reset l'objet post */
+watch(
+  () => props.show,
+  async (newShow) => {
+    //newShow représente la nouvelle valeur qu'a pris la props show
+    if (newShow && props.post) {
+      postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 obj pour éviter que si l'on modife un, l'autre se modifie aussi
+    }
+  }
+);
+onMounted(() => {
+  if (props.post) {
+    postData.value = { ...props.post };
+  }
+});
+</script>
 
 <style lang="scss">
 .modal__layer {
