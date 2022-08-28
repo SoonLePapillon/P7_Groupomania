@@ -6,7 +6,7 @@
           X
         </button>
         <div class="modal__body">
-          <h1>{{ title }}</h1>
+          <h1 ref="titleModal">{{ title }}</h1>
           <div class="modal__textarea">
             <textarea
               class="post_textarea"
@@ -23,7 +23,7 @@
                   id="custom-label"
                   ref="label"
                   :style="`background-image:url(${postData.imageUrl})`"
-                  ><span v-if="!postData.imageUrl">+</span></label
+                  >+</label
                 >
                 <input
                   ref="input"
@@ -45,7 +45,7 @@
             <ButtonFormComponent
               text="Publier"
               @click="
-                createPost();
+                sendPost();
                 $emit('close');
               "
             ></ButtonFormComponent>
@@ -79,32 +79,46 @@ const token = contentLS.token;
 const input = ref(null);
 const label = ref(null);
 const postData = ref({});
+const titleModal = ref(null);
 
 /* Affiche la preview du fichier (l'image) uploadé  */
 const showUploadedImg = (event) => {
   const image = URL.createObjectURL(event.target.files[0]);
   label.value.style.backgroundImage = `url(${image})`;
-  label.value.innerText = '';
 };
 
 /* Supprime le fichier uploadé de l'input et du label qui sert de preview */
 const deleteImg = () => {
   input.value.value = null;
   label.value.style.backgroundImage = '';
-  label.value.innerText = '+';
+  if (postData.value.imageUrl) {
+    postData.value.imageUrl = null;
+  }
 };
 
-const createPost = async () => {
-  if (postData.value.content || input.value.value !== '') {
-    const formData = new FormData();
-    if (postData.value.content) {
-      formData.append('content', postData.value.content);
+const sendPost = async () => {
+  if (titleModal.value.innerText === 'Créez votre poste') {
+    if (postData.value.content || input.value.value !== '') {
+      const formData = new FormData();
+      if (postData.value.content) {
+        formData.append('content', postData.value.content);
+      }
+      if (input.value.value) {
+        formData.append('imageUrl', input.value.files[0]);
+      }
+      await postStore.createOne(formData, token);
     }
-    if (input.value.value) {
-      formData.append('imageUrl', input.value.files[0]);
-    }
-    await postStore.createOne(formData, token);
   } else {
+    if (postData.value.content || input.value.value !== '') {
+      const formData = new FormData();
+      if (postData.value.content) {
+        formData.append('content', postData.value.content);
+      }
+      if (input.value.value) {
+        formData.append('imageUrl', input.value.files[0]);
+      }
+      await postStore.updateOne(postData.value.id, formData, token);
+    }
   }
 };
 

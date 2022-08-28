@@ -70,11 +70,12 @@ const postController = {
     } else {
       try {
         if (req.file) {
-          // Si un fichier existe déjà sur le post trouvé
-          const filename = findPost.imageUrl.split("/images/")[1]; // On le supprime
-          fs.unlink(`images/${filename}`, () => {
-            if (req.file) {
-              // Si la modification comprend un nouveau fichier
+          // Si la requête comporte une image
+          if (findPost.imageUrl) {
+            // Si le post de base a une image
+            const filename = findPost.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+              // On supprime le fichier
               try {
                 findPost.update({
                   content: req.body.content,
@@ -86,9 +87,29 @@ const postController = {
               } catch {
                 res.status(400).send(err);
               }
-            } else {
+            });
+          } else {
+            // Si le post de base n'avait pas d'image
+            try {
+              findPost.update({
+                content: req.body.content,
+                imageUrl: `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+                }`,
+              });
+              res.status(200).send(findPost);
+            } catch {
+              res.status(400).send(err);
+            }
+          }
+        } else {
+          // La requête ne comporte pas d'image (que du contenu donc)
+          if (findPost.imageUrl) {
+            // Si le post de base a une image
+            const filename = findPost.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, () => {
+              // On supprime le fichier
               try {
-                // Sinon, si elle ne comprend que du texte
                 findPost.update({
                   content: req.body.content,
                 });
@@ -96,19 +117,20 @@ const postController = {
               } catch {
                 res.status(400).send(err);
               }
+            });
+          } else {
+            // Le post de base n'avait pas d'image
+            try {
+              findPost.update({
+                content: req.body.content,
+              });
+              res.status(200).send(findPost);
+            } catch {
+              res.status(400).send(err);
             }
-          });
-        } else {
-          // S'il nexiste pas de fichier sur le post trouvé
-          findPost.update({
-            content: req.body.content,
-            imageUrl: `${req.protocol}://${req.get("host")}/images/${
-              req.file.filename
-            }`,
-          });
-          res.status(200).send(findPost);
+          }
         }
-      } catch (err) {
+      } catch {
         res.status(500).send(err);
       }
     }

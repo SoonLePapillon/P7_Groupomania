@@ -34,6 +34,17 @@ export const usePostStore = defineStore('post', {
       });
       await this.getAll();
     },
+    async updateOne(id, data, token) {
+      await fetch(`http://localhost:3000/api/posts/updateOne/${id}`, {
+        method: 'PUT',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      await this.getAll();
+    },
     async deleteOne(id, token) {
       await fetch(`http://localhost:3000/api/posts/deleteOne/${id}`, {
         method: 'DELETE',
