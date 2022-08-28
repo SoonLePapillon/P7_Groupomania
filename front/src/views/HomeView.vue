@@ -29,8 +29,8 @@ const closeCreateModal = async () => {
   getPosts();
 };
 
-const deletePost = async (postId) => {
-  await postStore.deleteOne(postId);
+const deletePost = async (postId, token) => {
+  await postStore.deleteOne(postId, token);
   getPosts();
 };
 
@@ -108,11 +108,12 @@ onMounted(() => {
   row-gap: 7%;
   width: 100%;
   max-width: 1100px;
-  height: 100vh;
+  height: 100%;
   border-right: 1px solid rgba(0, 0, 0, 0.18);
   border-left: 1px solid rgba(0, 0, 0, 0.18);
   background-color: white;
-  overflow-y: scroll;
+  padding-bottom: 10px;
+  // overflow-y: scroll;
   &__header {
     margin-top: 45px;
   }

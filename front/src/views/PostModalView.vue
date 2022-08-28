@@ -15,6 +15,8 @@ const props = defineProps({
   },
 });
 
+const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
+const token = contentLS.token;
 const input = ref(null);
 const label = ref(null);
 const postData = ref({});
@@ -44,7 +46,7 @@ const createPost = async () => {
     if (input.value.value) {
       formData.append('imageUrl', input.value.files[0]);
     }
-    await postStore.createOne(formData);
+    await postStore.createOne(formData, token);
   } else {
   }
 };

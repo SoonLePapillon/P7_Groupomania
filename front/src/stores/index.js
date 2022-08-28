@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia';
 
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const token = contentLS.token;
-
 export const usePostStore = defineStore('post', {
   id: 'Post',
   state: () => ({
@@ -26,7 +23,7 @@ export const usePostStore = defineStore('post', {
       const data = await response.json();
       this.posts = data;
     },
-    async createOne(data) {
+    async createOne(data, token) {
       await fetch('http://localhost:3000/api/posts/createOne', {
         method: 'POST',
         body: data,
@@ -37,7 +34,7 @@ export const usePostStore = defineStore('post', {
       });
       await this.getAll();
     },
-    async deleteOne(id) {
+    async deleteOne(id, token) {
       await fetch(`http://localhost:3000/api/posts/deleteOne/${id}`, {
         method: 'DELETE',
         headers: {

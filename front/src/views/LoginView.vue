@@ -6,39 +6,77 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import LogoComponent from '../components/LogoComponent.vue';
 import EyeComponent from '../components/EyeComponent.vue';
 import TextBottomFormComponent from '../components/TextBottomFormComponent.vue';
-
 const userStore = useUserStore();
 const inputType = ref('password');
 const email = ref('');
 const password = ref('');
+let userNotFound = ref(false);
 
 const isFormFilled = computed(() => {
-  return email.value === '' || password.value === '';
+  return email.value !== '' || password.value !== '';
 });
 
-const submitUser = async (e) => {
-  e.preventDefault();
-  const result = await userStore.login(email.value, password.value);
-  if (localStorage !== null) {
-    localStorage.clear();
-  }
-  localStorage.setItem(
-    'TokenUser',
-    JSON.stringify({
-      token: result.token,
-      userId: result.userId,
-      userRole: result.userRole,
-      userName: result.userName,
-    })
-  );
-  router.push('/news');
-};
-
+/* Eye icone qui permet de switch le type de l'input "Mot de passe" */
 function showPassword() {
-  inputType.value === 'password' // On vérifie si le type est password.
+  inputType.value === 'password' // On vérifie si le type est password
     ? (inputType.value = 'text') // Si oui on le passe en texte
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
+
+const regExpList = {
+  email: /.+\@.+\..+/,
+  password:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+};
+
+/* Permet de tester chaque champ individuellement par rapport aux regExp */
+const testRegexp = (el) => {
+  for (let key in regExpList) {
+    if (key === el.name) {
+      const regex = regExpList[key];
+      const test = regex.test(el.value);
+      if (test) {
+        if (el.classList.contains('isNotOk')) {
+          el.classList.remove('isNotOk');
+        }
+        el.classList.add('isOk');
+        return test;
+      } else {
+        el.classList.add('isNotOk');
+        return test;
+      }
+    }
+  }
+};
+
+/* Vérifie les champs, envoie les données de connexion et stock le token dans le LS */
+const submitUser = async (e) => {
+  e.preventDefault();
+  // On vérie d'abord si les regExp sont correctes
+  if (testRegexp(email.value) && testRegexp(password.value)) {
+    const result = await userStore.login(
+      email.value.value,
+      password.value.value
+    );
+    if (Object.values(result).includes('Utilisateur non trouvé !')) {
+      userNotFound.value = true;
+    } else {
+      if (localStorage !== null) {
+        localStorage.clear();
+      }
+      localStorage.setItem(
+        'TokenUser',
+        JSON.stringify({
+          token: result.token,
+          userId: result.userId,
+          userRole: result.userRole,
+          userName: result.userName,
+        })
+      );
+      router.push('/news');
+    }
+  }
+};
 </script>
 
 <template>
@@ -53,7 +91,8 @@ function showPassword() {
           placeholder="Adresse mail*"
           name="email"
           id="email"
-          v-model="email"
+          ref="email"
+          @input="testRegexp(email)"
         />
       </div>
       <div class="mot_de_passe">
@@ -63,10 +102,12 @@ function showPassword() {
           placeholder="Mot de passe*"
           name="password"
           id="password"
-          v-model="password"
+          ref="password"
+          @input="testRegexp(password)"
         />
         <eye-component :type="inputType" :click="showPassword"></eye-component>
       </div>
+      <p class="error" v-if="userNotFound">Utilisateur non trouvé.</p>
       <button-form-component
         text="Se connecter"
         id="submitButton"
@@ -141,6 +182,19 @@ function showPassword() {
       border-radius: 5px;
     }
   }
+}
+
+.error {
+  font-weight: bold;
+  color: red;
+  text-align: center;
+}
+.isOk {
+  border: 2px solid green !important;
+}
+
+.isNotOk {
+  border: 2px solid red !important;
 }
 
 footer {

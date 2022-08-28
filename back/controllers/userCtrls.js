@@ -44,7 +44,7 @@ const userController = {
             if (!valid) {
               return res
                 .status(401)
-                .json({ error: "Mot de passe incorrect !" });
+                .json({ error: "Utilisateur non trouvé !" }); // Et non mot de passe incorrect (donne l'info comme quoi une adresse mail est liée | pas sécurisé)
             } else {
               res.status(200).json({
                 userId: user.id,
