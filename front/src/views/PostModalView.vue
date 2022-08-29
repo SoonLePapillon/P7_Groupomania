@@ -73,9 +73,9 @@ const props = defineProps({
   },
 });
 
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const postStore = usePostStore();
-const token = contentLS.token;
+const locStr = JSON.parse(localStorage.getItem(`TokenUser`));
+const token = locStr.token;
 const input = ref(null);
 const label = ref(null);
 const postData = ref({});

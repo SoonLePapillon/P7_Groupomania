@@ -48,10 +48,10 @@ const userController = {
             } else {
               res.status(200).json({
                 userId: user.id,
-                userRole: user.isAdmin,
-                userName: user.firstName + " " + user.lastName,
+                isAdmin: user.isAdmin,
+                userName: `${user.firstName} ${user.lastName}`,
                 token: jwt.sign(
-                  { userId: user.id, userRole: user.isAdmin },
+                  { userId: user.id, isAdmin: user.isAdmin },
                   process.env.TOKEN,
                   { expiresIn: "3h" }
                 ),

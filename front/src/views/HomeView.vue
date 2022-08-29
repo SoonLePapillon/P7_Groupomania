@@ -25,7 +25,7 @@
           <h2>{{ username }}</h2>
           <div
             class="onePost__header__btn"
-            v-if="userId === post.createdBy || userRole"
+            v-if="userId === post.createdBy || isAdmin"
           >
             <fa
               class="icon"
@@ -46,9 +46,19 @@
           <img :src="post.imageUrl" v-show="post.imageUrl !== null" />
         </div>
         <footer class="onePost__rating">
-          <div @click="updateLike(post.id)" class="like__btn" ref="likeBtn">
+          <span>{{
+            post.reactions.length === 0 ? '' : post.reactions.length
+          }}</span>
+          <span
+            @click="updateLike(post.id)"
+            ref="likeBtn"
+            :class="{
+              likeBtn: checkLikeState(post.id) === true,
+              redLikeBtn: checkLikeState(post.id) === false,
+            }"
+          >
             ❤
-          </div>
+          </span>
         </footer>
       </div>
     </main>
@@ -64,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 import { usePostStore } from '../stores/index.js';
 import { useLikeStore } from '../stores/index.js';
 import PostModal from '../views/PostModalView.vue';
@@ -72,16 +82,15 @@ import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
 const postStore = usePostStore();
 const likeStore = useLikeStore();
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
-const userId = contentLS.userId;
-const token = contentLS.token;
-const username = contentLS.userName;
-const userRole = contentLS.userRole;
-let showCreateModal = ref(false);
-let showModifyModal = ref(false);
+const locStr = JSON.parse(localStorage.getItem(`TokenUser`));
+const userId = locStr.userId;
+const token = locStr.token;
+const username = locStr.userName;
+const isAdmin = locStr.isAdmin;
 const likeBtn = ref(null);
 const postToModify = ref(null);
-let isLiked = ref(false);
+let showCreateModal = ref(false);
+let showModifyModal = ref(false);
 
 const modifyPost = async (id) => {
   postToModify.value = postStore.posts.find((post) => post.id === id);
@@ -103,20 +112,32 @@ const deletePost = async (postId, token) => {
   await postStore.deleteOne(postId, token);
   getPosts();
 };
-
-const updateLike = async (postId) => {
-  const data = {
-    postId: postId,
-    value: true,
-  };
-  if (isLiked.value === false) {
-    likeBtn.value[0].classList.add('red');
-    isLiked.value = true;
-    await likeStore.likePost(data, token, data.postId);
+const checkLikeState = (postId) => {
+  const thisPost = postStore.posts.find((post) => post.id === postId);
+  const postReactions = thisPost.reactions;
+  const doesUserLike = postReactions.find((react) => react.userId === userId);
+  if (doesUserLike === undefined) {
+    return true;
   } else {
-    likeBtn.value[0].classList.remove('red');
-    isLiked.value = false;
-    await likeStore.likePost(data, token, data.postId);
+    return false;
+  }
+};
+const updateLike = async (postId) => {
+  const thisPost = postStore.posts.find((post) => post.id === postId);
+  const postReactions = thisPost.reactions;
+  const doesUserLike = postReactions.find((react) => react.userId === userId);
+  if (doesUserLike === undefined) {
+    // likeBtn.value[0].classList.add('red');
+    await likeStore.likePost(token, postId);
+    console.log('1');
+    getPosts();
+    return true;
+  } else {
+    // likeBtn.value[0].classList.remove('red');
+    await likeStore.likePost(token, postId);
+    console.log('2');
+    getPosts();
+    return false;
   }
 };
 
@@ -168,12 +189,12 @@ onMounted(() => {
   width: 95%;
   max-width: 700px;
   border-radius: 10px;
+  padding: 2%;
   box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.2);
   &__header {
     display: flex;
     justify-content: space-between;
-    width: 98%;
-    margin-top: 5px;
+    width: 100%;
     &__btn {
       display: flex;
       justify-content: center;
@@ -190,7 +211,7 @@ onMounted(() => {
     }
   }
   &__text {
-    width: 98%;
+    width: 100%;
     overflow-wrap: break-word;
   }
   &__image {
@@ -202,23 +223,38 @@ onMounted(() => {
       object-fit: cover;
     }
   }
-}
+  &__rating {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
 
-.like__btn {
-  font-size: 25px;
-  color: transparent;
-  transition: 0.3s;
-  background: rgba(133, 133, 133, 0.507);
-  background-clip: text;
-  -webkit-background-clip: text;
-  &:hover {
-    color: rgba(230, 54, 0, 0.95);
-    transition: 0.3s;
-    cursor: pointer;
+    .likeBtn {
+      font-size: 25px;
+      color: transparent;
+      transition: 0.3s;
+      background: rgba(133, 133, 133, 0.507);
+      background-clip: text;
+      -webkit-background-clip: text;
+      &:hover {
+        transition: 0.3s;
+        cursor: pointer;
+      }
+    }
+
+    .redLikeBtn {
+      font-size: 25px;
+      color: transparent;
+      transition: 0.3s;
+      background: rgba(133, 133, 133, 0.507);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: rgba(230, 54, 0, 0.95);
+      &:hover {
+        transition: 0.3s;
+        cursor: pointer;
+      }
+    }
   }
-}
-
-.red {
-  color: rgba(230, 54, 0, 0.95);
 }
 </style>

@@ -6,7 +6,7 @@
       <input
         name="firstName"
         type="text"
-        placeholder="Nom*"
+        placeholder="Prénom*"
         class="input small"
         @input="testRegexp(firstName)"
         ref="firstName"
@@ -14,7 +14,7 @@
       <input
         name="lastName"
         type="text"
-        placeholder="Prénom*"
+        placeholder="Nom*"
         class="input small"
         @input="testRegexp(lastName)"
         ref="lastName"
@@ -178,7 +178,7 @@ const validateForm = async (e) => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .signup {
   background-color: white;
   display: flex;

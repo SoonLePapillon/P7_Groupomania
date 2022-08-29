@@ -92,12 +92,14 @@ export const useUserStore = defineStore('user', {
 
 export const useLikeStore = defineStore('like', {
   actions: {
-    async likePost(data, token, postId) {
+    async likePost(token, postId) {
       const res = await fetch(
         `http://localhost:3000/api/posts/${postId}/reactions`,
         {
           method: 'POST',
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            postId,
+          }),
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
