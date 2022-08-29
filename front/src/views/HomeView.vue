@@ -9,7 +9,7 @@
       <PostModal
         :show="showCreateModal"
         @close="closeCreateModal"
-        :title="'Créez votre poste'"
+        :title="'Créez votre post'"
         :post="{}"
       >
       </PostModal>
@@ -45,7 +45,11 @@
         <div class="onePost__image">
           <img :src="post.imageUrl" v-show="post.imageUrl !== null" />
         </div>
-        <footer class="onePost__rating"></footer>
+        <footer class="onePost__rating">
+          <div @click="updateLike(post.id)" class="like__btn" ref="likeBtn">
+            ❤
+          </div>
+        </footer>
       </div>
     </main>
     <PostModal
@@ -62,17 +66,22 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 import { usePostStore } from '../stores/index.js';
+import { useLikeStore } from '../stores/index.js';
 import PostModal from '../views/PostModalView.vue';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
 const postStore = usePostStore();
+const likeStore = useLikeStore();
 const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = contentLS.userId;
 const token = contentLS.token;
 const username = contentLS.userName;
+const userRole = contentLS.userRole;
 let showCreateModal = ref(false);
 let showModifyModal = ref(false);
+const likeBtn = ref(null);
 const postToModify = ref(null);
+let isLiked = ref(false);
 
 const modifyPost = async (id) => {
   postToModify.value = postStore.posts.find((post) => post.id === id);
@@ -93,6 +102,22 @@ const closeCreateModal = async () => {
 const deletePost = async (postId, token) => {
   await postStore.deleteOne(postId, token);
   getPosts();
+};
+
+const updateLike = async (postId) => {
+  const data = {
+    postId: postId,
+    value: true,
+  };
+  if (isLiked.value === false) {
+    likeBtn.value[0].classList.add('red');
+    isLiked.value = true;
+    await likeStore.likePost(data, token, data.postId);
+  } else {
+    likeBtn.value[0].classList.remove('red');
+    isLiked.value = false;
+    await likeStore.likePost(data, token, data.postId);
+  }
 };
 
 onMounted(() => {
@@ -156,7 +181,7 @@ onMounted(() => {
       gap: 5px;
       .icon {
         font-size: 18px;
-        color: rgba(231, 54, 0, 0.959);
+        color: rgba(230, 54, 0, 0.95);
         &:hover {
           cursor: pointer;
           transform: scale(1.05);
@@ -179,17 +204,21 @@ onMounted(() => {
   }
 }
 
-::-webkit-scrollbar {
-  width: 15px;
+.like__btn {
+  font-size: 25px;
+  color: transparent;
+  transition: 0.3s;
+  background: rgba(133, 133, 133, 0.507);
+  background-clip: text;
+  -webkit-background-clip: text;
+  &:hover {
+    color: rgba(230, 54, 0, 0.95);
+    transition: 0.3s;
+    cursor: pointer;
+  }
 }
-::-webkit-scrollbar-thumb {
-  background-color: #999;
-  border: solid #fff;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 6px 4px;
+
+.red {
+  color: rgba(230, 54, 0, 0.95);
 }
 </style>

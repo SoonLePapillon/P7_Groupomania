@@ -97,7 +97,7 @@ const deleteImg = () => {
 };
 
 const sendPost = async () => {
-  if (titleModal.value.innerText === 'Créez votre poste') {
+  if (titleModal.value.innerText === 'Créez votre post') {
     if (postData.value.content || input.value.value !== '') {
       const formData = new FormData();
       if (postData.value.content) {

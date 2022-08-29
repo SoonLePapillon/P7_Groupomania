@@ -1,21 +1,19 @@
-import { react } from "../db/sequelize.js";
+import { react, post, sequelize } from "../db/sequelize.js";
 
 const reactionController = {
   react: async (req, res) => {
     const findReact = await react.findOne({
-      // On cherche si l'utilisateur a déjà réagi à ce post
       where: {
         userId: req.auth.userId,
-        postId: req.params.postId || req.body.postId,
+        postId: req.body.postId,
       },
     });
     switch (findReact) {
       case null: // Dans le cas où il y avait aucune réaction
         try {
-          // On créer une réaction
           const React = await react.create({
             userId: req.auth.userId,
-            postId: req.params.postId || req.body.postId,
+            postId: req.body.postId,
             value: req.body.value,
           });
           res.status(200).send(React);
@@ -26,21 +24,12 @@ const reactionController = {
 
       case findReact: // Dans le cas où l'utilisateur a déjà réagi
         if (req.auth.userId !== findReact.userId && req.auth.role === false) {
-          // Si c'est quelqu'un d'autre (hors admin) qui essaie de modifier la réaction d'un autre utilisateur
-          res.status(401).json({ message: "You can't change this reaction" }); // On lui interdit
+          res.status(401).json({ message: "Non autorisé." });
         } else {
-          // Si C'est le bon utilisateur
           if (findReact.value === req.body.value) {
-            // S'il a déjà réagi et qu'il réagit à nouveau avec la mm réaction
-            findReact.destroy(); // On la supprime
+            // On reclique sur like
+            findReact.destroy(); //
             res.status(200).json({ message: "Réaction supprimée" });
-          } else if (findReact.value !== req.body.value) {
-            // S'il change de réaction
-            findReact.update({
-              // On l'update
-              value: req.body.value,
-            });
-            res.status(200).send(findReact);
           }
           break;
         }

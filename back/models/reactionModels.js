@@ -5,9 +5,5 @@ export const reactionModel = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    value: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
   });
 };

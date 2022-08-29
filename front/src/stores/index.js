@@ -89,3 +89,25 @@ export const useUserStore = defineStore('user', {
     },
   },
 });
+
+export const useLikeStore = defineStore('like', {
+  actions: {
+    async likePost(data, token, postId) {
+      const res = await fetch(
+        `http://localhost:3000/api/posts/${postId}/reactions`,
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const resData = await res.json();
+      console.log(resData);
+      return resData;
+    },
+  },
+});

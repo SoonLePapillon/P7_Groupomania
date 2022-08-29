@@ -1,4 +1,4 @@
-import { post } from "../db/sequelize.js"; // sans les { } il ne reconnait pas posts car il n'a pas été exporté avec export default
+import { post, react } from "../db/sequelize.js"; // sans les { } il ne reconnait pas posts car il n'a pas été exporté avec export default
 import fs from "fs";
 
 const postController = {
@@ -36,6 +36,7 @@ const postController = {
         where: {
           id: req.params.id,
         },
+        include: [react],
       });
       res.status(200).send(findPost);
     } catch {
@@ -49,6 +50,7 @@ const postController = {
         order: [
           ["createdAt", "DESC"], // pour affichier du plus récent au moins récent
         ],
+        include: [react],
       });
       res.status(200).send(allPosts);
     } catch {
@@ -112,6 +114,7 @@ const postController = {
               try {
                 findPost.update({
                   content: req.body.content,
+                  imageUrl: null,
                 });
                 res.status(200).send(findPost);
               } catch {
