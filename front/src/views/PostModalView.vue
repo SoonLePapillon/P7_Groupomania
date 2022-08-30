@@ -120,10 +120,11 @@ const sendPost = async () => {
   }
   if (titleModal.value.innerText === 'Modifier') {
     if (imgModify.value === null) {
+      // Si le post n'a pas d'image
       if (postData.value.content === '') {
-        console.log('2');
         alert('Le post ne peut pas être vide.');
       } else {
+        // S'il en a une
         console.log('3');
         const formData = new FormData();
         formData.append('content', postData.value.content);
