@@ -104,6 +104,7 @@ const deleteImg = () => {
   }
 };
 
+/* Fonction qui permet de modifier ou de supprimer un post (selon la modal ouverte) */
 const sendPost = async () => {
   if (titleModal.value.innerText === 'Créez votre post') {
     if (postData.value.content || input.value.value !== '') {

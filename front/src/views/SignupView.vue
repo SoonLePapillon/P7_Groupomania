@@ -43,7 +43,7 @@
         <eye-component :type="inputType" :click="showPassword"></eye-component>
         <p class="signup__form__passwordInfo">
           Doit contenir une majuscule, un chiffre et un caractère spécial (8
-          caractères minimum)
+          caractères min.)
         </p>
       </div>
       <div>
@@ -107,6 +107,9 @@ function showPassword() {
 const checkPassword = () => {
   if (passwordConfirm.value.value !== password.value.value) {
     errorMsg.value.innerText = 'Les mots de passe ne sont pas identiques.';
+    if (passwordConfirm.value.classList.contains('isOk')) {
+      passwordConfirm.value.classList.remove('isOk');
+    }
     return false;
   } else {
     errorMsg.value.innerText = '';
@@ -145,6 +148,8 @@ const validateForm = async (e) => {
       })
     );
     router.push('/news');
+  } else {
+    alert('Des champs sont manquants ou incorrects.');
   }
 };
 </script>
@@ -177,7 +182,6 @@ const validateForm = async (e) => {
     align-items: center;
     width: 90%;
     height: 80%;
-    row-gap: 20px;
     & .input {
       height: 41px;
       background: #ffffff;

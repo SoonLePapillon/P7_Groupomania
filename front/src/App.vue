@@ -55,9 +55,9 @@ body {
   z-index: 99;
   display: flex;
   justify-content: space-between;
+  width: 100%;
   height: 10%;
   max-height: 60px;
-  width: 100%;
   background-color: white;
   box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.178);
   .logo {

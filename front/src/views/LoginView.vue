@@ -58,6 +58,7 @@ const email = ref('');
 const password = ref('');
 let userNotFound = ref(false);
 
+/* Permet de vérifier si le formulaire est entièrement rempli*/
 const isFormFilled = computed(() => {
   return email.value !== '' || password.value !== '';
 });
@@ -69,7 +70,7 @@ function showPassword() {
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
 
-/* Vérifie les champs, envoie les données de connexion et stock le token dans le LS */
+/* Vérifie les champs, envoie les données de connexion et récupère le token pour le stocker dans le LS */
 const submitUser = async (e) => {
   e.preventDefault();
   // On vérie d'abord si les regExp sont correctes
@@ -79,6 +80,7 @@ const submitUser = async (e) => {
       password.value.value
     );
     if (Object.values(result).includes('Utilisateur non trouvé !')) {
+      // Si le resultat du fecth contient "Utilisateur non trouvé"
       userNotFound.value = true;
     } else {
       if (localStorage !== null) {
@@ -95,6 +97,8 @@ const submitUser = async (e) => {
       );
       router.push('/news');
     }
+  } else {
+    alert('Des champs sont manquants ou incorrects.');
   }
 };
 </script>
