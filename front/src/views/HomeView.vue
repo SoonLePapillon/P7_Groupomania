@@ -27,13 +27,8 @@
             class="onePost__header__btn"
             v-if="userId === post.createdBy || isAdmin"
           >
+            <fa icon="fa-solid fa-pen-to-square" @click="modifyPost(post.id)" />
             <fa
-              class="icon"
-              icon="fa-solid fa-pen-to-square"
-              @click="modifyPost(post.id)"
-            />
-            <fa
-              class="icon"
               icon="fa-solid fa-trash-can"
               @click="deletePost(post.id, token)"
             />
@@ -74,9 +69,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, nextTick } from 'vue';
-import { usePostStore } from '../stores/index.js';
-import { useLikeStore } from '../stores/index.js';
+import { ref, onMounted, nextTick } from 'vue';
+import { usePostStore, useLikeStore } from '../stores/index.js';
 import PostModal from '../views/PostModalView.vue';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 
@@ -97,7 +91,8 @@ const modifyPost = async (id) => {
   showModifyModal.value = true;
   await nextTick();
 };
-/* Fonction d'affichage des posts */
+
+/* Fonction d'affichage des posts de façon antéchronologique */
 const getPosts = async () => {
   await postStore.getAll();
 };
@@ -112,6 +107,7 @@ const deletePost = async (postId, token) => {
   await postStore.deleteOne(postId, token);
   getPosts();
 };
+
 const checkLikeState = (postId) => {
   const thisPost = postStore.posts.find((post) => post.id === postId);
   const postReactions = thisPost.reactions;
@@ -127,13 +123,11 @@ const updateLike = async (postId) => {
   const postReactions = thisPost.reactions;
   const doesUserLike = postReactions.find((react) => react.userId === userId);
   if (doesUserLike === undefined) {
-    // likeBtn.value[0].classList.add('red');
     await likeStore.likePost(token, postId);
     console.log('1');
     getPosts();
     return true;
   } else {
-    // likeBtn.value[0].classList.remove('red');
     await likeStore.likePost(token, postId);
     console.log('2');
     getPosts();
@@ -148,30 +142,23 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #news {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include column-align-center;
+  @include width-height_max;
   row-gap: 7%;
-  width: 100%;
   max-width: 1100px;
-  height: 100%;
   border-right: 1px solid rgba(0, 0, 0, 0.18);
   border-left: 1px solid rgba(0, 0, 0, 0.18);
   background-color: white;
   padding-bottom: 10px;
-  // overflow-y: scroll;
   &__header {
     margin-top: 45px;
   }
 }
 
 .allPosts {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include column-align-center;
+  @include width-height_max;
   z-index: 5;
-  width: 100%;
-  height: 100%;
   gap: 30px;
   & p {
     color: black;
@@ -183,9 +170,8 @@ onMounted(() => {
 }
 
 .onePost {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include column-align-center;
+  gap: 5px;
   width: 95%;
   max-width: 700px;
   border-radius: 10px;
@@ -196,11 +182,9 @@ onMounted(() => {
     justify-content: space-between;
     width: 100%;
     &__btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include justify-and-align_center;
       gap: 5px;
-      .icon {
+      & > * {
         font-size: 18px;
         color: rgba(230, 54, 0, 0.95);
         &:hover {
@@ -218,8 +202,7 @@ onMounted(() => {
     width: 100%;
     max-height: 350px;
     img {
-      width: 100%;
-      height: 100%;
+      @include width-height_max;
       object-fit: cover;
     }
   }

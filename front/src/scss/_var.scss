@@ -1,11 +1,21 @@
-// COLORS
-
-$primary-red: #fd2d01;
-$second-red: #ffd7d7;
-$third-gray: #4e5166;
-
-@mixin flex_column {
+@mixin column-align-center {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@mixin row-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin justify-and-align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin width-height_max {
+  width: 100%;
+  height: 100%;
 }

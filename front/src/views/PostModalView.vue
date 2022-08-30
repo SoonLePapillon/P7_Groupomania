@@ -15,8 +15,15 @@
               maxlength="560"
             ></textarea>
           </div>
+          <div
+            ref="imgModify"
+            class="img__postModify"
+            v-if="title === 'Modifier' && postData.imageUrl"
+          >
+            <img :src="postData.imageUrl" alt="postPicture" />
+          </div>
           <div class="image-send">
-            <div class="imageInfo">
+            <div class="imageInfo" v-if="title === 'Créez votre post'">
               <div class="previewImg">
                 <label
                   for="image-input"
@@ -80,6 +87,7 @@ const input = ref(null);
 const label = ref(null);
 const postData = ref({});
 const titleModal = ref(null);
+const imgModify = ref(null);
 
 /* Affiche la preview du fichier (l'image) uploadé  */
 const showUploadedImg = (event) => {
@@ -108,15 +116,19 @@ const sendPost = async () => {
       }
       await postStore.createOne(formData, token);
     }
-  } else {
-    if (postData.value.content || input.value.value !== '') {
+  }
+  if (titleModal.value.innerText === 'Modifier') {
+    if (imgModify.value === null) {
+      if ('a') {
+        alert('Le post ne peut pas être vide.');
+      } else {
+        const formData = new FormData();
+        formData.append('content', '');
+        await postStore.updateOne(postData.value.id, formData, token);
+      }
+    } else {
       const formData = new FormData();
-      if (postData.value.content) {
-        formData.append('content', postData.value.content);
-      }
-      if (input.value.value) {
-        formData.append('imageUrl', input.value.files[0]);
-      }
+      formData.append('content', postData.value.content);
       await postStore.updateOne(postData.value.id, formData, token);
     }
   }
@@ -141,30 +153,27 @@ onMounted(() => {
 
 <style lang="scss">
 .modal__layer {
+  @include row-justify-center;
+  @include width-height_max;
+  align-items: center;
   position: fixed;
   z-index: 9998;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   background-color: rgba(0, 0, 0, 0.267);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: opacity 0.3s ease;
 }
 
 .modal__container {
-  display: flex;
+  @include row-justify-center;
   align-items: center;
-  justify-content: center;
   position: relative;
-  width: 100%;
-  height: 80%;
+  width: 95%;
+  height: 70%;
   max-width: 1000px;
   margin: 0px auto;
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
 }
@@ -191,15 +200,6 @@ onMounted(() => {
   }
 }
 
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
 .modal-enter-from {
   opacity: 0;
 }
@@ -214,22 +214,15 @@ onMounted(() => {
   transform: scale(1.02);
 }
 
-///////////////////////////////////////////////////
-///////////////////////////////////////////////////
-///////////////////////////////////////////////////
-
 .modal__body {
-  display: flex;
-  flex-flow: column nowrap;
+  @include column-align-center;
+  @include width-height_max;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+  flex-wrap: nowrap;
   background-color: white;
   border-radius: 15px;
   & h1 {
     margin-top: 6%;
-    // color: rgba(0, 0, 0, 0.76);
     color: red;
     font-size: 30px;
   }
@@ -241,8 +234,7 @@ onMounted(() => {
   max-width: 1000px;
   height: 30%;
   & textarea {
-    height: 100%;
-    width: 100%;
+    @include width-height_max;
     border: none;
     outline: none;
     padding: 10px 10px 0 10px;
@@ -254,13 +246,22 @@ onMounted(() => {
     }
   }
 }
+
+.img__postModify {
+  width: 100px;
+  height: 100px;
+  margin-top: 4%;
+  & > img {
+    @include width-height-max;
+    object-fit: cover;
+  }
+}
+
 .image-send {
-  display: flex;
+  @include justify-and-align-center;
   flex-wrap: wrap;
   margin: 30px 0 20px 0;
   width: 90%;
-  justify-content: center;
-  align-items: center;
   .imageInfo {
     display: flex;
     flex: 1;
@@ -271,9 +272,7 @@ onMounted(() => {
     display: none;
   }
   #custom-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include justify-and-align_center;
     font-size: 55px;
     width: 100px;
     height: 100px;

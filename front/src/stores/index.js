@@ -11,9 +11,14 @@ export const usePostStore = defineStore('post', {
     },
   },
   actions: {
-    async getOne(id) {
+    async getOne(id, token) {
       const response = await fetch(
-        `http://localhost:3000/api/posts/getOne/${id}`
+        `http://localhost:3000/api/posts/getOne/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       const data = await response.json();
       return data;
@@ -113,3 +118,30 @@ export const useLikeStore = defineStore('like', {
     },
   },
 });
+
+export const regExpList = {
+  firstName: /^[A-Za-zÀ-ü-' ]+$/,
+  lastName: /^[A-Za-zÀ-ü-' ]+$/,
+  email: /.+\@.+\..+/,
+  password:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+};
+
+export const testRegexp = (el) => {
+  for (let key in regExpList) {
+    if (key === el.name) {
+      const regex = regExpList[key];
+      const test = regex.test(el.value);
+      if (test) {
+        if (el.classList.contains('isNotOk')) {
+          el.classList.remove('isNotOk');
+        }
+        el.classList.add('isOk');
+        return test;
+      } else {
+        el.classList.add('isNotOk');
+        return test;
+      }
+    }
+  }
+};

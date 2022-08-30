@@ -40,8 +40,8 @@ button {
   }
   &:hover {
     background: #fd2d01;
-    cursor: pointer;
     box-shadow: 5px 4px 7px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
   }
 }
 </style>

@@ -12,27 +12,20 @@
 </template>
 
 <script setup>
-// setup sert à passer à l'api composition (en gros)
-
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const route = useRouter();
-const logoutBtn = ref(null);
-const contentLS = JSON.parse(localStorage.getItem(`TokenUser`));
 
+/* Permet de vider le localstorage s'il contient un token utilisateur */
 const logout = () => {
-  window.localStorage.length > 0
-    ? window.localStorage.clear()
-    : console.log('Y A R frérot');
+  window.localStorage.length > 0 ? window.localStorage.clear() : null;
 };
 
+/* Permet d'afficher le header uniquement si le nom de la route est 'News' */
 const showHeader = computed(() => {
-  // Computed est une fonction qui return forcément
   return route.currentRoute.value.name === 'News';
 });
-
-// method c'est une fonction qui ne retourne pas de valeur, genre pour modifier tmtc
 </script>
 
 <style lang="scss">
@@ -53,9 +46,8 @@ body {
 }
 
 #app {
-  height: 100%;
-  @include flex_column;
-  height: 100%;
+  @include column-align-center;
+  @include width-height_max;
   box-shadow: inset 5px 0 200px rgba(0, 0, 0, 0.452);
 }
 
@@ -73,25 +65,21 @@ body {
     max-width: 30%;
     margin-left: 2%;
     img {
-      width: 100%;
-      height: 100%;
+      @include width-height_max;
       object-fit: contain;
     }
   }
 }
 
 .logout {
-  display: flex;
-  align-items: center;
+  @include justify-and-align-center;
   font-size: 15px;
   width: 125px;
-  justify-content: center;
   font-weight: bold;
   text-decoration: none;
   color: #fb4646;
   height: 100%;
   &:hover {
-    // border: 2px solid rgba(255, 0, 0, 0.603);
     box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.247);
   }
 }

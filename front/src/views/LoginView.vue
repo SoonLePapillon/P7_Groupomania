@@ -46,8 +46,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useUserStore } from '../stores/index.js';
 import router from '../router/index.js';
+import { useUserStore, testRegexp } from '../stores/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import LogoComponent from '../components/LogoComponent.vue';
 import EyeComponent from '../components/EyeComponent.vue';
@@ -68,32 +68,6 @@ function showPassword() {
     ? (inputType.value = 'text') // Si oui on le passe en texte
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
-
-const regExpList = {
-  email: /.+\@.+\..+/,
-  password:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-};
-
-/* Permet de tester chaque champ individuellement par rapport aux regExp */
-const testRegexp = (el) => {
-  for (let key in regExpList) {
-    if (key === el.name) {
-      const regex = regExpList[key];
-      const test = regex.test(el.value);
-      if (test) {
-        if (el.classList.contains('isNotOk')) {
-          el.classList.remove('isNotOk');
-        }
-        el.classList.add('isOk');
-        return test;
-      } else {
-        el.classList.add('isNotOk');
-        return test;
-      }
-    }
-  }
-};
 
 /* Vérifie les champs, envoie les données de connexion et stock le token dans le LS */
 const submitUser = async (e) => {
@@ -127,10 +101,8 @@ const submitUser = async (e) => {
 
 <style lang="scss">
 .login {
-  display: flex;
+  @include justify-and-align_center;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
   width: 90%;
   max-width: 1000px;
   height: 80%;
@@ -149,11 +121,9 @@ const submitUser = async (e) => {
     color: rgba(0, 0, 0, 0.76);
   }
   &__form {
-    position: relative;
-    display: flex;
+    @include justify-and-align_center;
     flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
+    position: relative;
     width: 90%;
     height: 60%;
     column-gap: 2%;
@@ -173,7 +143,7 @@ const submitUser = async (e) => {
       }
       &:focus {
         outline: none;
-        border: 2px solid $primary-red;
+        border: 2px solid #fd2d01;
       }
     }
     & div {

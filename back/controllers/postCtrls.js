@@ -68,73 +68,26 @@ const postController = {
       req.auth.userId !== findPost.createdBy &&
       req.auth.role === false
     ) {
-      res.status(401).json({ message: "You can't delete this post" });
+      res.status(401).json({ message: "You can't modify this post" });
     } else {
-      try {
-        if (req.file) {
-          // Si la requête comporte une image
-          if (findPost.imageUrl) {
-            // Si le post de base a une image
-            const filename = findPost.imageUrl.split("/images/")[1];
-            fs.unlink(`images/${filename}`, () => {
-              // On supprime le fichier
-              try {
-                findPost.update({
-                  content: req.body.content,
-                  imageUrl: `${req.protocol}://${req.get("host")}/images/${
-                    req.file.filename
-                  }`,
-                });
-                res.status(200).send(findPost);
-              } catch {
-                res.status(400).send(err);
-              }
-            });
-          } else {
-            // Si le post de base n'avait pas d'image
-            try {
-              findPost.update({
-                content: req.body.content,
-                imageUrl: `${req.protocol}://${req.get("host")}/images/${
-                  req.file.filename
-                }`,
-              });
-              res.status(200).send(findPost);
-            } catch {
-              res.status(400).send(err);
-            }
-          }
-        } else {
-          // La requête ne comporte pas d'image (que du contenu donc)
-          if (findPost.imageUrl) {
-            // Si le post de base a une image
-            const filename = findPost.imageUrl.split("/images/")[1];
-            fs.unlink(`images/${filename}`, () => {
-              // On supprime le fichier
-              try {
-                findPost.update({
-                  content: req.body.content,
-                  imageUrl: null,
-                });
-                res.status(200).send(findPost);
-              } catch {
-                res.status(400).send(err);
-              }
-            });
-          } else {
-            // Le post de base n'avait pas d'image
-            try {
-              findPost.update({
-                content: req.body.content,
-              });
-              res.status(200).send(findPost);
-            } catch {
-              res.status(400).send(err);
-            }
-          }
+      if (findPost.imageUrl && req.body.content === "") {
+        try {
+          findPost.update({
+            content: null,
+          });
+          res.status(200).send(findPost);
+        } catch {
+          res.status(400).send(err);
         }
-      } catch {
-        res.status(500).send(err);
+      } else {
+        try {
+          findPost.update({
+            content: req.body.content,
+          });
+          res.status(200).send(findPost);
+        } catch {
+          res.status(400).send(err);
+        }
       }
     }
   },

@@ -14,7 +14,6 @@ const reactionController = {
           const React = await react.create({
             userId: req.auth.userId,
             postId: req.body.postId,
-            value: req.body.value,
           });
           res.status(200).send(React);
         } catch (err) {
@@ -23,7 +22,7 @@ const reactionController = {
         break;
 
       case findReact: // Dans le cas où l'utilisateur a déjà réagi
-        if (req.auth.userId !== findReact.userId && req.auth.role === false) {
+        if (req.auth.userId !== findReact.userId) {
           res.status(401).json({ message: "Non autorisé." });
         } else {
           if (findReact.value === req.body.value) {

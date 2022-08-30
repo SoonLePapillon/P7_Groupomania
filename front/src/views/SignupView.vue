@@ -1,7 +1,7 @@
 <template>
   <logo-component></logo-component>
   <div class="signup">
-    <h2 class="signup__title">Créez votre compte</h2>
+    <h2 class="signup__title">Inscription</h2>
     <form class="signup__form">
       <input
         name="firstName"
@@ -82,7 +82,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useUserStore } from '../stores/index.js';
+import { useUserStore, testRegexp } from '../stores/index.js';
 import router from '../router/index.js';
 import ButtonFormComponent from '../components/ButtonFormComponent.vue';
 import LogoComponent from '../components/LogoComponent.vue';
@@ -103,35 +103,6 @@ function showPassword() {
     ? (inputType.value = 'text') // Si oui on le passe en texte
     : (inputType.value = 'password'); // Si non, on le laisse en password
 }
-
-const regExpList = {
-  firstName: /^[A-Za-zÀ-ü-' ]+$/,
-  lastName: /^[A-Za-zÀ-ü-' ]+$/,
-  email: /.+\@.+\..+/,
-  password:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-};
-
-const testRegexp = (el) => {
-  for (let key in regExpList) {
-    if (key === el.name) {
-      const regex = regExpList[key];
-      const test = regex.test(el.value);
-      if (test) {
-        if (el.classList.contains('isNotOk')) {
-          el.classList.remove('isNotOk');
-        }
-        console.log(test);
-        el.classList.add('isOk');
-        return test;
-      } else {
-        console.log(test);
-        el.classList.add('isNotOk');
-        return test;
-      }
-    }
-  }
-};
 
 const checkPassword = () => {
   if (passwordConfirm.value.value !== password.value.value) {
@@ -180,11 +151,9 @@ const validateForm = async (e) => {
 
 <style lang="scss" scoped>
 .signup {
+  @include justify-and-align_center;
   background-color: white;
-  display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
   width: 90%;
   max-width: 1000px;
   height: 80%;
@@ -222,7 +191,7 @@ const validateForm = async (e) => {
       }
       &:focus {
         outline: none;
-        border: 2px solid $primary-red;
+        border: 2px solid #fd2d01;
       }
     }
     & .small {
@@ -272,7 +241,7 @@ footer {
   height: min-content !important;
   & p {
     text-align: center;
-    color: $primary-red;
+    color: #fd2d01;
     font-weight: bold;
   }
 }
