@@ -23,7 +23,7 @@
             <img :src="postData.imageUrl" alt="postPicture" />
           </div>
           <div class="image-send">
-            <div class="imageInfo" v-if="title === 'Créez votre post'">
+            <div class="imageInfo" v-if="title === 'Nouveau post'">
               <div class="previewImg">
                 <label
                   for="image-input"
@@ -106,7 +106,7 @@ const deleteImg = () => {
 
 /* Fonction qui permet de modifier ou de supprimer un post (selon la modal ouverte) */
 const sendPost = async () => {
-  if (titleModal.value.innerText === 'Créez votre post') {
+  if (titleModal.value.innerText === 'Nouveau post') {
     if (postData.value.content || input.value.value !== '') {
       const formData = new FormData();
       if (postData.value.content) {
@@ -120,11 +120,13 @@ const sendPost = async () => {
   }
   if (titleModal.value.innerText === 'Modifier') {
     if (imgModify.value === null) {
-      if ('a') {
+      if (postData.value.content === '') {
+        console.log('2');
         alert('Le post ne peut pas être vide.');
       } else {
+        console.log('3');
         const formData = new FormData();
-        formData.append('content', '');
+        formData.append('content', postData.value.content);
         await postStore.updateOne(postData.value.id, formData, token);
       }
     } else {
@@ -225,7 +227,7 @@ onMounted(() => {
   & h1 {
     margin-top: 6%;
     color: red;
-    font-size: 30px;
+    font-size: 26px;
   }
 }
 .modal__textarea {

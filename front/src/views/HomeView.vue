@@ -9,7 +9,7 @@
       <PostModal
         :show="showCreateModal"
         @close="closeCreateModal"
-        :title="'Créez votre post'"
+        :title="'Nouveau post'"
         :post="{}"
       >
       </PostModal>
