@@ -70,7 +70,7 @@ const postController = {
       req.auth.userId !== findPost.createdBy &&
       req.auth.role === false
     ) {
-      res.status(401).json({ message: "You can't modify this post" });
+      res.status(401).json({ message: "Vous ne pouvez pas modifier ce post." });
     } else {
       if (findPost.imageUrl && req.body.content === "") {
         // Si le post de base a une image, on peut modifier pour supprimer le texte
@@ -107,18 +107,20 @@ const postController = {
     ) {
       console.log(req.auth.userId);
       console.log(findPost.createdBy);
-      res.status(401).json({ message: "You can't delete this post" });
+      res
+        .status(401)
+        .json({ message: "Vous ne pouvez pas supprimer ce post." });
     } else {
       try {
         if (findPost.imageUrl) {
           const filename = findPost.imageUrl.split("/images/")[1];
           fs.unlink(`images/${filename}`, () => {
             findPost.destroy();
-            res.status(200).json({ message: "Post deleted" });
+            res.status(200).json({ message: "Post supprimé" });
           });
         } else {
           findPost.destroy();
-          res.status(200).json({ message: "Post deleted" });
+          res.status(200).json({ message: "Post supprimé" });
         }
       } catch (err) {
         res.status(400).send(err);

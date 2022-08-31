@@ -1,6 +1,8 @@
 <template>
   <header v-if="showHeader" class="header">
-    <div class="logo"><img src="../src/assets/logo.jpg" /></div>
+    <div class="logo">
+      <img src="../src/assets/logo.jpg" alt="logo Groupomania" />
+    </div>
     <nav>
       <router-link to="/" class="logout" @click="logout"
         >Déconnexion</router-link
