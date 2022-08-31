@@ -1,6 +1,7 @@
 import { post, react } from "../db/sequelize.js"; // sans les { } il ne reconnait pas posts car il n'a pas été exporté avec export default
 import fs from "fs";
 
+/* Controller POST */
 const postController = {
   createOne: async (req, res) => {
     if (req.body.content === null && req.file === null) {
@@ -8,6 +9,7 @@ const postController = {
     } else {
       try {
         if (!req.file) {
+          // Si la requête ne contient pas de fichier
           const Post = await post.create({
             userId: req.auth.userId,
             content: req.body.content,
@@ -71,6 +73,7 @@ const postController = {
       res.status(401).json({ message: "You can't modify this post" });
     } else {
       if (findPost.imageUrl && req.body.content === "") {
+        // Si le post de base a une image, on peut modifier pour supprimer le texte
         try {
           findPost.update({
             content: null,

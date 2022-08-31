@@ -6,7 +6,7 @@ const auth = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     const userAdmin = decodedToken.isAdmin;
-    req.auth = { token: token, userId: userId, role: userAdmin }; // enrichit la requête du front, est exploitée dans la route delete
+    req.auth = { token: token, userId: userId, role: userAdmin }; // enrichit la requête du front, est exploité dans les controllers
     if (req.body.userId && req.body.userId !== userId) {
       throw "Invalid user ID";
     } else {
