@@ -144,7 +144,7 @@ watch(
   async (newShow) => {
     //newShow représente la nouvelle valeur qu'a pris la props show
     if (newShow && props.post) {
-      postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 obj pour éviter que si l'on modife un, l'autre se modifie aussi
+      postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 objets pour éviter que si l'on modifie un, l'autre se modifie aussi
     }
   }
 );

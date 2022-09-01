@@ -19,7 +19,7 @@ import { useRouter } from 'vue-router';
 
 const route = useRouter();
 
-/* Permet de vider le localstorage s'il contient un token utilisateur */
+/* Deconnexion : vide le localstorage */
 const logout = () => {
   window.localStorage.length > 0 ? window.localStorage.clear() : null;
 };
