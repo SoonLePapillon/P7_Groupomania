@@ -59,6 +59,7 @@
             checkPassword();
           "
           ref="passwordConfirm"
+          v-if="isSignupView"
         />
       </div>
 
@@ -124,15 +125,17 @@ function showPassword() {
 
 /* Vérifie si les deux mots de passe correspondent dans Signup View */
 const checkPassword = () => {
-  if (passwordConfirm.value.value !== password.value.value) {
-    errorMsg.value.innerText = 'Les mots de passe ne sont pas identiques.';
-    if (passwordConfirm.value.classList.contains('isOk')) {
-      passwordConfirm.value.classList.remove('isOk');
+  if (isSignupView.value === true) {
+    if (passwordConfirm.value.value !== password.value.value) {
+      errorMsg.value.innerText = 'Les mots de passe ne sont pas identiques.';
+      passwordConfirm.value.classList.contains('isOk')
+        ? passwordConfirm.value.classList.remove('isOk')
+        : null;
+      return false;
+    } else {
+      errorMsg.value.innerText = '';
+      return true;
     }
-    return false;
-  } else {
-    errorMsg.value.innerText = '';
-    return true;
   }
 };
 
@@ -144,7 +147,6 @@ const signupForm = async () => {
     testRegexp(firstName.value) &&
     testRegexp(email.value) &&
     testRegexp(password.value) &&
-    testRegexp(passwordConfirm.value) &&
     checkPassword()
   ) {
     const data = {
@@ -163,7 +165,7 @@ const signupForm = async () => {
       JSON.stringify({
         token: result.token,
         userId: result.userId,
-        userRole: result.userRole,
+        isAdmin: result.isAdmin,
         userName: result.userName,
       })
     );
@@ -174,8 +176,7 @@ const signupForm = async () => {
 };
 
 /* Fonction de connexion */
-const loginForm = async (e) => {
-  e.preventDefault();
+const loginForm = async () => {
   if (testRegexp(email.value) && testRegexp(password.value)) {
     const result = await userStore.login(
       email.value.value,
@@ -193,7 +194,7 @@ const loginForm = async (e) => {
         JSON.stringify({
           token: result.token,
           userId: result.userId,
-          userRole: result.userRole,
+          isAdmin: result.isAdmin,
           userName: result.userName,
         })
       );

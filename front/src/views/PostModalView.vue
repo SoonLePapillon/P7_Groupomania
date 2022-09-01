@@ -125,7 +125,6 @@ const sendPost = async () => {
         alert('Le post ne peut pas être vide.');
       } else {
         // S'il en a une
-        console.log('3');
         const formData = new FormData();
         formData.append('content', postData.value.content);
         await postStore.updateOne(postData.value.id, formData, token);

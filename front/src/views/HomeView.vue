@@ -214,6 +214,7 @@ onMounted(() => {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 3px;
     width: 100%;
 
     .likeBtn {

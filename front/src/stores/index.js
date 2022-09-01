@@ -122,7 +122,7 @@ export const regExpList = {
   lastName: /^[A-Za-zÀ-ü-' ]+$/,
   email: /.+\@.+\..+/,
   password:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm,
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 };
 
 export const testRegexp = (el) => {
@@ -131,9 +131,9 @@ export const testRegexp = (el) => {
       const regex = regExpList[key];
       const test = regex.test(el.value);
       if (test) {
-        if (el.classList.contains('isNotOk')) {
-          el.classList.remove('isNotOk');
-        }
+        el.classList.contains('isNotOk')
+          ? el.classList.remove('isNotOk')
+          : null;
         el.classList.add('isOk');
         return test;
       } else {
