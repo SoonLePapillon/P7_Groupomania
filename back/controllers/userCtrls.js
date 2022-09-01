@@ -6,7 +6,7 @@ const userController = {
   signup: (req, res) => {
     // On vérifie d'abord si le mot de passe respecte la RegExp
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/gm;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regex.test(req.body.password)) {
       res
         .status(400)
