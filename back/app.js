@@ -1,12 +1,38 @@
 import express from "express";
+import { sequelize } from "./db/db_init.js";
 import postsRoutes from "./routes/postsRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import reactionsRoutes from "./routes/reactionsRoutes.js";
 import helmet from "helmet";
 import cors from "cors";
-import "dotenv/config";
 import path from "path";
 import url from "url";
+import { user } from "./db/sequelize.js";
+import bcrypt from "bcrypt";
+import "dotenv/config";
+
+sequelize
+  .sync() // {alter : true} si j'ai besoin de mettre à jour ma BDD suite à un changement au niveau des modèles par ex.
+  .then(async () => {
+    console.log("Connexion à la BDD réussie");
+    const findUserAdmin = await user.findOne({
+      where: {
+        isAdmin: true,
+      },
+    });
+    if (!findUserAdmin) {
+      bcrypt.hash(process.env.ADMINPASSWORD, 10).then((hash) => {
+        user.create({
+          email: "test@admin.com",
+          password: hash,
+          firstName: "Adminidatrateur",
+          lastName: "Admin",
+          isAdmin: true,
+        });
+      });
+    }
+  })
+  .catch((error) => console.log(error));
 
 const __filename = url.fileURLToPath(import.meta.url); // Obligatoire car j'utilise
 const __dirname = path.dirname(__filename); // import et pas require

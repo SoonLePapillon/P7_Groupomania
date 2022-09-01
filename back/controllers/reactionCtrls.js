@@ -1,4 +1,4 @@
-import { react, post, sequelize } from "../db/sequelize.js";
+import { react } from "../db/sequelize.js";
 
 const reactionController = {
   react: async (req, res) => {
