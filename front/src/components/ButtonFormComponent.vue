@@ -24,6 +24,7 @@ div {
   justify-content: center;
   height: min-content !important;
 }
+
 button {
   width: 250px;
   height: 50px;
@@ -32,6 +33,7 @@ button {
   box-shadow: 5px 4px 10px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   border: none;
+  transition: 0.2s;
   & > span {
     font-weight: 700;
     font-size: 22px;
@@ -40,6 +42,8 @@ button {
   }
   &:hover {
     background: #fd2d01;
+    opacity: 1;
+    transition: 0.2s;
     box-shadow: 5px 4px 7px rgba(0, 0, 0, 0.5);
     cursor: pointer;
   }

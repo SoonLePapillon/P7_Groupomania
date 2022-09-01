@@ -18,4 +18,5 @@ const storage = multer.diskStorage({
   },
 });
 
-export default multer({ storage: storage }).single("imageUrl"); // .single pour dire qu'il s'agit d'un fichier unique (et image signifie qu'il s'agit d'image uniquement)
+export default multer({ storage: storage }).single("imageUrl");
+// .single pour dire qu'il s'agit d'un fichier unique

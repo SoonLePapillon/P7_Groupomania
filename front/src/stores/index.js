@@ -55,7 +55,6 @@ export const usePostStore = defineStore('post', {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
-          // 'Content-type':'application/json',
           Authorization: `Bearer ${token}`,
         },
       });
@@ -113,7 +112,6 @@ export const useLikeStore = defineStore('like', {
         }
       );
       const resData = await res.json();
-      console.log(resData);
       return resData;
     },
   },

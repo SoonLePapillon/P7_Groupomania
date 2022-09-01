@@ -1,5 +1,4 @@
-// Attention, c'est juste une fonction avec des paramètres, la création des tables se fait dans dbconfig.js
-
+// Ce fichier est uniquement la fonction à utiliser pour la création du modèle qui se fait dans sequelize.js
 export const postModel = (sequelize, DataTypes) => {
   return sequelize.define("post", {
     id: {

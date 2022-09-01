@@ -64,8 +64,8 @@
       :post="postToModify"
     >
     </PostModal>
+    <!-- :show sert à basculer la propriété display d'un élément -->
   </div>
-  <!-- :show sert à basculer la propriété display d'un élément -->
 </template>
 
 <script setup>
@@ -92,22 +92,25 @@ const modifyPost = async (id) => {
   await nextTick();
 };
 
-/* Fonction d'affichage des posts de façon antéchronologique */
+/* Affichage des posts de façon antéchronologique */
 const getPosts = async () => {
   await postStore.getAll();
 };
 
+/* Ferme la modale et met à jour l'affichage de tous les pots */
 const closeCreateModal = async () => {
   showCreateModal.value = false;
   await nextTick(); // Attend le prochain cycle de màj Vue (50 ms environ)
   getPosts();
 };
 
+/* Permet de supprimer un post et de mettre à jour l'affichage */
 const deletePost = async (postId, token) => {
   await postStore.deleteOne(postId, token);
   getPosts();
 };
 
+/* Permet de vérifier l'état du like (exploiter dans le changement de style de l'icone like) */
 const checkLikeState = (postId) => {
   const thisPost = postStore.posts.find((post) => post.id === postId);
   const postReactions = thisPost.reactions;
@@ -118,23 +121,24 @@ const checkLikeState = (postId) => {
     return false;
   }
 };
+
+/* Met à jour le like d'un post et l'affichage des posts */
 const updateLike = async (postId) => {
   const thisPost = postStore.posts.find((post) => post.id === postId);
   const postReactions = thisPost.reactions;
   const doesUserLike = postReactions.find((react) => react.userId === userId);
   if (doesUserLike === undefined) {
     await likeStore.likePost(token, postId);
-    console.log('1');
     getPosts();
     return true;
   } else {
     await likeStore.likePost(token, postId);
-    console.log('2');
     getPosts();
     return false;
   }
 };
 
+/* Au chargement de la page */
 onMounted(() => {
   getPosts();
 });

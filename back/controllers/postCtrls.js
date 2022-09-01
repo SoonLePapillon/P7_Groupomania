@@ -17,6 +17,7 @@ const postController = {
           });
           res.status(200).send(Post);
         } else {
+          // Si elle en contient un
           const Post = await post.create({
             userId: req.auth.userId,
             content: req.body.content,
@@ -50,7 +51,7 @@ const postController = {
       let allPosts = [];
       allPosts = await post.findAll({
         order: [
-          ["createdAt", "DESC"], // pour affichier du plus récent au moins récent
+          ["createdAt", "DESC"], // Du plus récent au moins récent
         ],
         include: [react],
       });
@@ -73,7 +74,7 @@ const postController = {
       res.status(401).json({ message: "Vous ne pouvez pas modifier ce post." });
     } else {
       if (findPost.imageUrl && req.body.content === "") {
-        // Si le post de base a une image, on peut modifier pour supprimer le texte
+        // Si le post de base a une image, on peut modifier et supprimer le texte
         try {
           findPost.update({
             content: null,
@@ -83,6 +84,7 @@ const postController = {
           res.status(400).send(err);
         }
       } else {
+        // Si le post n'a pas d'image
         try {
           findPost.update({
             content: req.body.content,
@@ -105,13 +107,12 @@ const postController = {
       req.auth.userId !== findPost.createdBy &&
       req.auth.role === false
     ) {
-      console.log(req.auth.userId);
-      console.log(findPost.createdBy);
       res
         .status(401)
         .json({ message: "Vous ne pouvez pas supprimer ce post." });
     } else {
       try {
+        // Si le post contenait une image
         if (findPost.imageUrl) {
           const filename = findPost.imageUrl.split("/images/")[1];
           fs.unlink(`images/${filename}`, () => {
@@ -119,6 +120,7 @@ const postController = {
             res.status(200).json({ message: "Post supprimé" });
           });
         } else {
+          // S'il n'y avait que du texte
           findPost.destroy();
           res.status(200).json({ message: "Post supprimé" });
         }

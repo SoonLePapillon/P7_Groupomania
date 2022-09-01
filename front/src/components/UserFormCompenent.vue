@@ -115,13 +115,14 @@ const password = ref(null);
 const passwordConfirm = ref(null);
 const errorMsg = ref(null);
 
+/* Permet de switch le type de l'input afin de voir le mdp */
 function showPassword() {
-  inputType.value === 'password' // On vérifie si le type est password.
-    ? (inputType.value = 'text') // Si oui on le passe en texte
-    : (inputType.value = 'password'); // Si non, on le laisse en password
+  inputType.value === 'password'
+    ? (inputType.value = 'text')
+    : (inputType.value = 'password');
 }
 
-/* Vérifie les deux mots de passe correspondent - Signup View */
+/* Vérifie si les deux mots de passe correspondent dans Signup View */
 const checkPassword = () => {
   if (passwordConfirm.value.value !== password.value.value) {
     errorMsg.value.innerText = 'Les mots de passe ne sont pas identiques.';
@@ -135,6 +136,7 @@ const checkPassword = () => {
   }
 };
 
+/* Fonction de création de compte */
 const signupForm = async () => {
   // On vérie d'abord si les regExp sont correctes
   if (
@@ -171,6 +173,7 @@ const signupForm = async () => {
   }
 };
 
+/* Fonction de connexion */
 const loginForm = async (e) => {
   e.preventDefault();
   if (testRegexp(email.value) && testRegexp(password.value)) {
@@ -178,9 +181,9 @@ const loginForm = async (e) => {
       email.value.value,
       password.value.value
     );
-    if (Object.values(result).includes('Utilisateur non trouvé !')) {
-      // Si le resultat du fecth contient "Utilisateur non trouvé"
-      alert('Vérifiez vos informations de connexion');
+    if (Object.values(result).includes('Utilisateur non trouvé.')) {
+      // Si le resultat du fetch contient "Utilisateur non trouvé !"
+      alert('Vérifiez vos informations de connexion.');
     } else {
       if (localStorage !== null) {
         localStorage.clear();

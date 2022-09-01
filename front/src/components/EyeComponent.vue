@@ -25,7 +25,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 .eye {
   position: absolute;
-  width: 31px;
+  width: 30px;
   height: 23px;
   bottom: 8px;
   right: 7px;
