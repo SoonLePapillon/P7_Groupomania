@@ -12,10 +12,14 @@
 <p><strong>Groupomania</strong> est un réseau social privé visant à améliorer les conditions de travail des employés de l’entreprise en leur proposant une plateforme où échanger.</p>
 <h1 id="comment-installer-groupomania">Comment installer Groupomania</h1>
 <p>Attention, Groupomania fonctionne avec une base de données relationnelle utilisant le langage SQL. Pour mener à bien vos tests, il est nécessaire de savoir configurer une base de données pour permettre au backend de l’application de s’y connecter. Dans le cadre de la soutenance, la database avec un utilisateur disposant de droits administrateur a été fournie dans les livrables.</p>
+<p><u>Voici ses identifiants :</u><br>
+email : <a href="mailto:admin@admin.com">admin@admin.com</a><br>
+password : admintest</p>
 <p><strong>BACK</strong><br>
 Depuis la racine du projet, exécutez la commande <code>cd back</code> suivie de <code>npm install</code>.<br>
-Une fois l’installation des packages faite, n’oubliez pas de renommer le fichier .env.example en <strong>.env</strong>. et de le remplir.<br>
-Une fois cela fait, vous pourrez exécuter la commande <code>npm run dev</code>.</p>
+Une fois l’installation des packages faite, n’oubliez pas de renommer le fichier .env.example en <strong>.env</strong>. et de le remplir.</p>
+<p><img src="https://cdn.discordapp.com/attachments/791459845827723275/1015313119083507732/unknown.png" alt="enter image description here"></p>
+<p>Une fois cela fait, vous pourrez exécuter la commande <code>npm run dev</code>.</p>
 <p><strong>FRONT</strong><br>
 Depuis la racine du projet, exécutez la commande <code>cd front</code> suivie de <code>npm install</code>.<br>
 Une fois cela fait, vous pourrez exécuter la commande <code>npm run dev</code> et vous rendre sur le lien généré dans votre console.</p>
