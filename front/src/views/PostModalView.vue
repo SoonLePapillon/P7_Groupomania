@@ -80,7 +80,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'username']);
 
 const postStore = usePostStore();
 const locStr = JSON.parse(localStorage.getItem(`TokenUser`));
@@ -119,6 +119,10 @@ const sendPost = async () => {
         formData.append('imageUrl', input.value.files[0]);
       }
       await postStore.createOne(formData, token);
+      emit('close');
+      emptyPost.value === true ? (emptyPost.value = false) : null;
+    } else {
+      emptyPost.value = true;
     }
   }
   if (titleModal.value.innerText === 'Modifier') {
@@ -151,6 +155,7 @@ watch(
     //newShow représente la nouvelle valeur qu'a pris la props show
     if (newShow && props.post) {
       postData.value = { ...props.post }; // ... = affectation par décomposition : déstructure les 2 objets pour éviter que si l'on modifie un, l'autre se modifie aussi
+      emptyPost.value === true ? (emptyPost.value = false) : null;
     }
   }
 );
@@ -180,7 +185,7 @@ onMounted(() => {
   position: relative;
   width: 95%;
   height: 70%;
-  max-width: 1000px;
+  max-width: 700px;
   margin: 0px auto;
   background-color: #fff;
   border-radius: 5px;
@@ -331,6 +336,7 @@ onMounted(() => {
   color: red;
   font-weight: bold;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 @media all and (min-width: 700px) {

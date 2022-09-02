@@ -1,15 +1,4 @@
 <template>
-  <header v-if="showHeader" class="header">
-    <div class="logo">
-      <img src="../src/assets/logo.jpg" alt="logo Groupomania" />
-    </div>
-    <nav>
-      <router-link to="/" class="logout" @click="logout"
-        >Déconnexion</router-link
-      >
-    </nav>
-  </header>
-
   <RouterView />
 </template>
 
@@ -49,40 +38,9 @@ body {
 
 #app {
   @include column-align-center;
-  @include width-height_max;
-  box-shadow: inset 5px 0 200px rgba(0, 0, 0, 0.452);
-}
-
-.header {
-  z-index: 99;
-  display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
-  height: 10%;
-  max-height: 60px;
-  background-color: white;
-  box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.178);
-  .logo {
-    height: 100%;
-    max-width: 30%;
-    margin-left: 2%;
-    img {
-      @include width-height_max;
-      object-fit: contain;
-    }
-  }
-}
-
-.logout {
-  @include justify-and-align-center;
-  font-size: 15px;
-  width: 125px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #fb4646;
   height: 100%;
-  &:hover {
-    box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.247);
-  }
+  box-shadow: inset 5px 0 200px rgba(0, 0, 0, 0.452);
 }
 </style>

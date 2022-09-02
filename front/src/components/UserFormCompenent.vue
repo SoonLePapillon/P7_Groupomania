@@ -66,22 +66,21 @@
       <div class="errorDiv" v-if="isSignupView">
         <p ref="errorMsg" class="form__body__errorMessage"></p>
       </div>
-
-      <button-form-component
-        :text="isSignupView ? 'Envoyer' : 'Se connecter'"
-        @click.prevent="isSignupView ? signupForm() : loginForm()"
-      ></button-form-component>
       <p v-if="wrongForm" class="errorMsg">
         Des champs sont manquants ou incorrects.
       </p>
       <p v-if="verifyUser" class="errorMsg">
         Vérifiez vos informations de connexion.
       </p>
+      <button-form-component
+        :text="isSignupView ? 'Envoyer' : 'Se connecter'"
+        @click.prevent="isSignupView ? signupForm() : loginForm()"
+      ></button-form-component>
     </form>
     <footer>
       <text-bottom-form-component
         :question="isSignupView ? 'Déjà inscrit ?' : 'Pas de compte ?'"
-        :response="isSignupView ? 'Connecez-vous !' : 'Inscrivez-vous !'"
+        :response="isSignupView ? 'Connectez-vous !' : 'Inscrivez-vous !'"
         :url="isSignupView ? '/' : '/signup'"
       ></text-bottom-form-component>
     </footer>
@@ -218,17 +217,21 @@ const loginForm = async () => {
 
 <style lang="scss" scoped>
 .form {
-  @include justify-and-align_center;
-  background-color: white;
-  flex-wrap: wrap;
-  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 95%;
   max-width: 1000px;
-  height: 80%;
+  max-height: 700px;
+  background-color: white;
   box-shadow: 5px 5px 20px #0000003d;
   border-radius: 16px;
-  margin-top: 2%;
+  margin-bottom: 10px;
+  padding: 2% 5%;
+  height: 100%;
   &__title {
-    width: 298px;
+    width: 100%;
     height: 50px;
     font-weight: 700;
     font-size: 32px;
@@ -241,11 +244,11 @@ const loginForm = async () => {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
+    width: 100%;
     align-items: center;
-    width: 90%;
-    height: 80%;
+    flex: 1;
     & .input {
-      height: 41px;
+      height: 40px;
       background: #ffffff;
       mix-blend-mode: normal;
       border: 1px solid #00000085;
@@ -288,11 +291,9 @@ const loginForm = async () => {
 }
 
 footer {
-  display: flex;
-  width: max-content;
-  justify-content: space-between;
+  @include row-justify-center;
+  align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
 }
 
 .isOk {
@@ -319,9 +320,9 @@ footer {
   font-weight: bold;
 }
 
-@media all and (max-width: 500px) {
-  .passwordInput {
-    margin-bottom: 5px;
+@media all and (max-width: 768px) {
+  div > img {
+    scale: 2;
   }
 }
 </style>

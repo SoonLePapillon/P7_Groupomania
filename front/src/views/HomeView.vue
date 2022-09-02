@@ -1,6 +1,14 @@
 <template>
-  <div id="news" v-if="token">
-    <header id="news__header">
+  <header class="header">
+    <div class="header__logo">
+      <img src="../assets/logo.jpg" alt="logo Groupomania" />
+    </div>
+    <router-link to="/" @click="logout" class="header__logout"
+      >Déconnexion</router-link
+    >
+  </header>
+  <main class="news">
+    <header class="news__header">
       <ButtonFormComponent
         class="show-modal"
         @click="showCreateModal = true"
@@ -22,8 +30,7 @@
         :id="post.id"
       >
         <header class="onePost__header">
-          <h2>{{ username }}</h2>
-          <!-- A corriger pour mettre celui du créateur du post ! -->
+          <h2>{{ post.user.firstName }} {{ post.user.lastName }}</h2>
           <div
             class="onePost__header__btn"
             v-if="userId === post.createdBy || isAdmin"
@@ -66,7 +73,7 @@
     >
     </PostModal>
     <!-- :show sert à basculer la propriété display d'un élément -->
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -80,10 +87,10 @@ const likeStore = useLikeStore();
 const locStr = JSON.parse(localStorage.getItem(`TokenUser`));
 const userId = locStr.userId;
 const token = locStr.token;
-const username = locStr.userName;
 const isAdmin = locStr.isAdmin;
 const likeBtn = ref(null);
 const postToModify = ref(null);
+const username = ref(null);
 let showCreateModal = ref(false);
 let showModifyModal = ref(false);
 
@@ -146,7 +153,38 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-#news {
+.header {
+  z-index: 99;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 6%;
+  background-color: white;
+  box-shadow: 5px 0px 20px rgba(0, 0, 0, 0.178);
+  &__logo {
+    height: 100%;
+    max-width: 50%;
+    margin-left: 2%;
+    & > img {
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+  &__logout {
+    @include justify-and-align-center;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fb4646;
+    height: 100%;
+    padding: 10px;
+    &:hover {
+      box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.247);
+    }
+  }
+}
+
+.news {
   @include column-align-center;
   @include width-height_max;
   row-gap: 7%;
@@ -154,17 +192,19 @@ onMounted(() => {
   border-right: 1px solid rgba(0, 0, 0, 0.18);
   border-left: 1px solid rgba(0, 0, 0, 0.18);
   background-color: white;
-  padding-bottom: 10px;
+  overflow-y: scroll;
+  padding-top: 30px;
   &__header {
-    margin-top: 45px;
+    height: 50px;
   }
 }
 
 .allPosts {
   @include column-align-center;
-  @include width-height_max;
-  z-index: 5;
+  width: 100%;
   gap: 30px;
+  padding-bottom: 20px;
+
   & p {
     color: black;
   }
@@ -205,9 +245,9 @@ onMounted(() => {
   }
   &__image {
     width: 100%;
-    max-height: 350px;
-    img {
-      @include width-height_max;
+    & img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
   }
@@ -245,5 +285,26 @@ onMounted(() => {
       }
     }
   }
+}
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: rgba(255, 41, 3, 0.863);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(255, 38, 0);
 }
 </style>
