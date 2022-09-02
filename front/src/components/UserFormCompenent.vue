@@ -28,7 +28,7 @@
         @input="testRegexp(email)"
         ref="email"
       />
-      <div>
+      <div class="passwordInput">
         <input
           id="password"
           name="password"
@@ -71,6 +71,12 @@
         :text="isSignupView ? 'Envoyer' : 'Se connecter'"
         @click.prevent="isSignupView ? signupForm() : loginForm()"
       ></button-form-component>
+      <p v-if="wrongForm" class="errorMsg">
+        Des champs sont manquants ou incorrects.
+      </p>
+      <p v-if="verifyUser" class="errorMsg">
+        Vérifiez vos informations de connexion.
+      </p>
     </form>
     <footer>
       <text-bottom-form-component
@@ -115,6 +121,8 @@ const email = ref(null);
 const password = ref(null);
 const passwordConfirm = ref(null);
 const errorMsg = ref(null);
+const wrongForm = ref(null);
+const verifyUser = ref(null);
 
 /* Permet de switch le type de l'input afin de voir le mdp */
 function showPassword() {
@@ -171,7 +179,7 @@ const signupForm = async () => {
     );
     router.push('/news');
   } else {
-    alert('Des champs sont manquants ou incorrects.');
+    wrongForm.value = true;
   }
 };
 
@@ -184,7 +192,8 @@ const loginForm = async () => {
     );
     if (Object.values(result).includes('Utilisateur non trouvé.')) {
       // Si le resultat du fetch contient "Utilisateur non trouvé !"
-      alert('Vérifiez vos informations de connexion.');
+      wrongForm.value === true ? (wrongForm.value = false) : null;
+      verifyUser.value = true;
     } else {
       if (localStorage !== null) {
         localStorage.clear();
@@ -201,7 +210,8 @@ const loginForm = async () => {
       router.push('/news');
     }
   } else {
-    alert('Des champs sont manquants ou incorrects.');
+    verifyUser.value === true ? (verifyUser.value = false) : null;
+    wrongForm.value = true;
   }
 };
 </script>
@@ -299,6 +309,19 @@ footer {
     text-align: center;
     color: #fd2d01;
     font-weight: bold;
+  }
+}
+
+.errorMsg {
+  width: 100%;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media all and (max-width: 500px) {
+  .passwordInput {
+    margin-bottom: 5px;
   }
 }
 </style>

@@ -51,12 +51,12 @@
             </div>
             <ButtonFormComponent
               text="Publier"
-              @click="
-                sendPost();
-                $emit('close');
-              "
+              @click="sendPost"
             ></ButtonFormComponent>
           </div>
+          <p class="emptyPostMsg" v-if="emptyPost">
+            Votre post ne peut pas être vide.
+          </p>
         </div>
       </div>
     </div>
@@ -80,6 +80,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['close']);
+
 const postStore = usePostStore();
 const locStr = JSON.parse(localStorage.getItem(`TokenUser`));
 const token = locStr.token;
@@ -88,6 +90,7 @@ const label = ref(null);
 const postData = ref({});
 const titleModal = ref(null);
 const imgModify = ref(null);
+const emptyPost = ref(null);
 
 /* Affiche la preview du fichier (l'image) uploadé  */
 const showUploadedImg = (event) => {
@@ -122,17 +125,21 @@ const sendPost = async () => {
     if (imgModify.value === null) {
       // Si le post n'a pas d'image
       if (postData.value.content === '') {
-        alert('Le post ne peut pas être vide.');
+        emptyPost.value = true;
       } else {
-        // S'il en a une
         const formData = new FormData();
         formData.append('content', postData.value.content);
         await postStore.updateOne(postData.value.id, formData, token);
+        emit('close');
+        emptyPost.value === true ? (emptyPost.value = false) : null;
       }
     } else {
+      // S'il en a une
       const formData = new FormData();
       formData.append('content', postData.value.content);
       await postStore.updateOne(postData.value.id, formData, token);
+      emit('close');
+      emptyPost.value === true ? (emptyPost.value = false) : null;
     }
   }
 };
@@ -318,6 +325,12 @@ onMounted(() => {
   &:hover {
     cursor: pointer;
   }
+}
+
+.emptyPostMsg {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 @media all and (min-width: 700px) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="news">
+  <div id="news" v-if="token">
     <header id="news__header">
       <ButtonFormComponent
         class="show-modal"
@@ -23,6 +23,7 @@
       >
         <header class="onePost__header">
           <h2>{{ username }}</h2>
+          <!-- A corriger pour mettre celui du créateur du post ! -->
           <div
             class="onePost__header__btn"
             v-if="userId === post.createdBy || isAdmin"
