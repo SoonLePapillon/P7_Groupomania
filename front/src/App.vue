@@ -2,22 +2,7 @@
   <RouterView />
 </template>
 
-<script setup>
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
-
-const route = useRouter();
-
-/* Deconnexion : vide le localstorage */
-const logout = () => {
-  window.localStorage.length > 0 ? window.localStorage.clear() : null;
-};
-
-/* Permet d'afficher le header uniquement si le nom de la route est 'News' */
-const showHeader = computed(() => {
-  return route.currentRoute.value.name === 'News';
-});
-</script>
+<script setup></script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');

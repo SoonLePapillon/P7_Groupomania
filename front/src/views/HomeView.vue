@@ -90,7 +90,6 @@ const token = locStr.token;
 const isAdmin = locStr.isAdmin;
 const likeBtn = ref(null);
 const postToModify = ref(null);
-const username = ref(null);
 let showCreateModal = ref(false);
 let showModifyModal = ref(false);
 
@@ -98,6 +97,11 @@ const modifyPost = async (id) => {
   postToModify.value = postStore.posts.find((post) => post.id === id);
   showModifyModal.value = true;
   await nextTick();
+};
+
+/* Deconnexion : vide le localstorage */
+const logout = () => {
+  window.localStorage.length > 0 ? window.localStorage.clear() : null;
 };
 
 /* Affichage des posts de façon antéchronologique */
