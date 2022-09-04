@@ -12,7 +12,7 @@
 <p><strong>Groupomania</strong> est un réseau social privé visant à améliorer les conditions de travail des employés de l’entreprise en leur proposant une plateforme où échanger.<br>
 Il s’agit également d’un projet étudiant OpenClassrooms dans le cadre de la formation développeur web.</p>
 <h1 id="comment-installer-groupomania">Comment installer Groupomania</h1>
-<p>Attention, Groupomania fonctionne avec une base de données relationnelle utilisant le langage SQL. Dans le cadre de la soutenance, un fichier <strong>groupomania.sql</strong> étant la base de données avec un utilisateur disposant de droits administrateur, a été fournie dans les livrables.<br>
+<p>Attention, Groupomania fonctionne avec une base de données relationnelle utilisant le langage SQL. Dans le cadre de la soutenance, un fichier <strong>.sql</strong> étant la base de données avec un utilisateur disposant de droits administrateur, a été fournie dans les livrables.<br>
 Pour importer ce fichier, il faut vous rendre dans votre terminal et saisir la commande suivante :</p>
 <pre><code>mysql -u votre_username -p database_name &lt; file.sql
 </code></pre>
